@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Check, 
   Globe, 
@@ -9,60 +9,16 @@ import {
   Share2, 
   ExternalLink,
   Play,
-  Sliders
+  Sliders,
+  MapPin,
+  Phone
 } from 'lucide-react';
 
 export default function App() {
   // Live simulation states
-  const [speed, setSpeed] = useState(222);
-  const [voltage, setVoltage] = useState(404.7);
-  const [battTemp, setBattTemp] = useState(39.6);
-  const [motorTemp, setMotorTemp] = useState(67.2);
-  const [soc, setSoc] = useState(83);
   const [lapTime, setLapTime] = useState(0);
-  const [consoleLogs, setConsoleLogs] = useState<string[]>([
-    "[22:51:38] ABS system active",
-    "[22:51:50] Inverter temp normal",
-    "[22:52:10] u-blox NEO-M9N GNSS 3D Fix (19 Sats)",
-    "[22:52:35] Telemetry uplink: 4G LTE Connected",
-    "[22:52:48] Isolated CAN packet freq: 852Hz",
-    "[22:53:02] Lap 3 split +0.12s vs best"
-  ]);
 
-  const consolePanelRef = useRef<HTMLDivElement>(null);
-
-  // Periodically update telemetry values
-  useEffect(() => {
-    const telemetryInterval = setInterval(() => {
-      setSpeed(prev => {
-        const change = Math.floor(Math.random() * 7) - 3;
-        const next = prev + change;
-        return next > 240 ? 240 : next < 205 ? 205 : next;
-      });
-      setVoltage(prev => {
-        const next = prev + (Math.random() * 0.4 - 0.2);
-        return parseFloat(next.toFixed(1));
-      });
-      setBattTemp(prev => {
-        const next = prev + (Math.random() * 0.2 - 0.1);
-        return parseFloat(next.toFixed(1));
-      });
-      setMotorTemp(prev => {
-        const next = prev + (Math.random() * 0.4 - 0.2);
-        return parseFloat(next.toFixed(1));
-      });
-      setSoc(prev => {
-        if (Math.random() > 0.8) {
-          return prev > 10 ? prev - 1 : 99; // Slowly deplete battery
-        }
-        return prev;
-      });
-    }, 1200);
-
-    return () => clearInterval(telemetryInterval);
-  }, []);
-
-  // Update Lap timer and scrolling log messages
+  // Update Lap timer
   useEffect(() => {
     const timerInterval = setInterval(() => {
       setLapTime(prev => {
@@ -71,40 +27,10 @@ export default function App() {
       });
     }, 100);
 
-    const logMessages = [
-      "SOC battery core temperature safe",
-      "CAN-bus busload: 34%",
-      "GPS Position accuracy < 0.8m",
-      "4G LTE signal: Excellent (-68dBm)",
-      "IMU G-Force Peak: 1.84G lateral",
-      "Wheel speed slip correction active",
-      "Telemetry streaming to podium backend",
-      "Yaw rate matching steering angle sensor",
-      "Active cooling pump power: 85%"
-    ];
-
-    const logsInterval = setInterval(() => {
-      const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
-      const randomMsg = logMessages[Math.floor(Math.random() * logMessages.length)];
-      setConsoleLogs(prev => {
-        const next = [...prev, `[${timestamp}] ${randomMsg}`];
-        if (next.length > 25) next.shift();
-        return next;
-      });
-    }, 4000);
-
     return () => {
       clearInterval(timerInterval);
-      clearInterval(logsInterval);
     };
   }, []);
-
-  // Auto-scroll logs panel container
-  useEffect(() => {
-    if (consolePanelRef.current) {
-      consolePanelRef.current.scrollTop = consolePanelRef.current.scrollHeight;
-    }
-  }, [consoleLogs]);
 
   // Format running lap time to M:SS.S
   const formatTime = (timeInSeconds: number) => {
@@ -136,13 +62,11 @@ export default function App() {
       <header className="main-header">
         <div className="container">
           <a href="/" className="logo" aria-label="SynchroTech Homepage">
-            {/* Custom SVG logo mimicking the speedo gauge + text */}
-            <svg className="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2a10 10 0 1 0 10 10" />
-              <path d="M12 6a6 6 0 1 0 6 6" />
-              <path d="M12 12l4-4" />
-            </svg>
-            <span>SYNCHRO</span>TECH
+            <img 
+              src="/logotype.png" 
+              alt="SynchroTech" 
+              style={{ height: '36px', width: 'auto', objectFit: 'contain' }} 
+            />
           </a>
           <nav aria-label="Main Navigation">
             <ul className="nav-menu">
@@ -165,7 +89,7 @@ export default function App() {
             <h1>
               Precision <br />
               Telemetry For <br />
-              <span className="text-red">Every Track Level</span>
+              <span className="text-purple">Every Track Level</span>
             </h1>
             <p>
               From weekend track days to professional endurance racing. Capture, 
@@ -231,7 +155,7 @@ export default function App() {
 
             {/* Card 3: Display (Feature rich, live dynamic mockup) */}
             <article className="card">
-              <span className="card-badge badge-red">Driver Cockpit</span>
+              <span className="card-badge badge-purple">Driver Cockpit</span>
               <div className="card-media">
                 {/* Embedded live digital racing dashboard interface */}
                 <div className="display-mockup" aria-label="Simulated display device screen">
@@ -264,9 +188,9 @@ export default function App() {
               <h3>Display</h3>
               <p className="card-subtitle">The Eyes — Race-Grade Display</p>
               <ul className="card-features">
-                <li className="red-icon"><Check /> 5 View Modes (Race / Lap / Energy)</li>
-                <li className="red-icon"><Check /> Auto Day/Night Theme via ALS</li>
-                <li className="red-icon"><Check /> Cross-Venue Auto-Scaling</li>
+                <li className="purple-icon"><Check /> 5 View Modes (Race / Lap / Energy)</li>
+                <li className="purple-icon"><Check /> Auto Day/Night Theme via ALS</li>
+                <li className="purple-icon"><Check /> Cross-Venue Auto-Scaling</li>
               </ul>
               <button className="btn btn-outline-dark">Learn More <ArrowRightIcon /></button>
             </article>
@@ -290,7 +214,7 @@ export default function App() {
             </div>
             
             <div className="feature-item">
-              <div className="feature-icon-wrapper icon-red-bg">
+              <div className="feature-icon-wrapper icon-purple-bg">
                 <Sliders />
               </div>
               <h3>Flexible I/O</h3>
@@ -365,146 +289,105 @@ export default function App() {
                 <div style={{ width: '38px' }} />
               </div>
               
-              <div className="dashboard-canvas">
-                {/* Dashboard Sidebar Stats */}
-                <div className="dashboard-sidebar">
-                  {/* SPEED */}
-                  <div className="dash-panel">
-                    <div className="panel-header">
-                      <span>Telemetry</span>
-                      <span className="live-indicator">Live</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                      <span className="big-stat-val">{speed}</span>
-                      <span className="big-stat-unit">km/h</span>
-                    </div>
-                  </div>
+              <div className="video-container" style={{ position: 'relative', width: '100%', background: '#070b13' }}>
+                <video 
+                  src="/video/demo.webm" 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                  {/* SOC Gauge */}
-                  <div className="dash-panel">
-                    <div className="panel-header">
-                      <span>SOC</span>
-                      <span>{soc}%</span>
-                    </div>
-                    <div className="soc-bar">
-                      <span className={`soc-segment ${soc >= 10 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 20 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 30 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 40 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 50 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 60 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 70 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 80 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 90 ? 'active' : ''}`} />
-                      <span className={`soc-segment ${soc >= 100 ? 'active' : ''}`} />
-                    </div>
-                  </div>
+      {/* Contact Section */}
+      <section id="contact" className="contact-section" aria-labelledby="contact-title">
+        <div className="container">
+          <div className="section-header">
+            <span className="category">Hubungi Kami</span>
+            <h2 id="contact-title">Contact Our Team</h2>
+            <p>Ada pertanyaan mengenai sistem telemetri SynchroTech? Hubungi kami langsung.</p>
+          </div>
 
-                  {/* Temperature Metrics */}
-                  <div className="dash-panel">
-                    <div className="param-grid">
-                      <div className="param-item">
-                        <div className="param-label">SYS VOLT</div>
-                        <div className="param-val">{voltage} V</div>
-                      </div>
-                      <div className="param-item">
-                        <div className="param-label">SYS AMP</div>
-                        <div className="param-val">16.9 A</div>
-                      </div>
-                      <div className="param-item">
-                        <div className="param-label">BATT TEMP</div>
-                        <div className="param-val">{battTemp} °C</div>
-                      </div>
-                      <div className="param-item">
-                        <div className="param-label">MOT TEMP</div>
-                        <div className="param-val">{motorTemp} °C</div>
-                      </div>
-                    </div>
+          <div className="contact-grid">
+            {/* Contact Info Card */}
+            <div className="contact-info-card">
+              <h3>Detail Kontak & Workshop</h3>
+              <p className="contact-desc">
+                Silakan kunjungi workshop kami atau hubungi kami melalui WhatsApp untuk dukungan cepat dan informasi produk.
+              </p>
+              
+              <div className="contact-details-list">
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <MapPin size={20} />
                   </div>
-
-                  {/* Terminal Console Logs */}
-                  <div className="dash-panel" style={{ flexGrow: 1, padding: '8px' }}>
-                    <div className="panel-header">System Logs</div>
-                    <div ref={consolePanelRef} className="console-panel">
-                      {consoleLogs.map((log, index) => (
-                        <div key={index} className="console-line">
-                          {log}
-                        </div>
-                      ))}
-                    </div>
+                  <div className="contact-detail-text">
+                    <h4>Alamat</h4>
+                    <p>Jl. St., Karanggeringging, Sumpiuh, Kec. Sumpiuh, Kabupaten Banyumas, Jawa Tengah 53195, Indonesia</p>
                   </div>
                 </div>
 
-                {/* Dashboard Main Canvas Area */}
-                <div className="dashboard-main">
-                  {/* Map Panel (Laguna Seca Circuit Path) */}
-                  <div className="dash-panel map-panel">
-                    <div className="panel-header" style={{ position: 'absolute', top: '12px', left: '12px', right: '12px', zIndex: 10 }}>
-                      <span>Track Map - Circuit Outline</span>
-                      <span>Laguna Seca</span>
-                    </div>
-                    {/* Inline vector tracing of Laguna Seca */}
-                    <svg viewBox="0 0 400 250" style={{ width: '85%', height: '80%', marginTop: '10px' }} aria-hidden="true">
-                      {/* Grey race track path */}
-                      <path 
-                        className="racetrack-path" 
-                        d="M 280 40 C 350 40, 360 80, 310 110 C 260 140, 290 190, 240 210 C 190 230, 150 180, 120 180 C 90 180, 50 160, 50 120 C 50 80, 110 50, 170 80 C 210 100, 220 70, 210 50 C 200 30, 240 40, 280 40 Z" 
-                      />
-                      {/* Glowing green path representing current session progress */}
-                      <path 
-                        className="racetrack-progress" 
-                        d="M 280 40 C 350 40, 360 80, 310 110 C 260 140, 290 190, 240 210 C 190 230, 150 180, 120 180 C 90 180, 50 160, 50 120 C 50 80, 110 50, 170 80 C 210 100, 220 70, 210 50 C 200 30, 240 40, 280 40 Z"
-                      />
-                      {/* Racing Car indicator dot */}
-                      <circle className="racetrack-car" cx="240" cy="210" r="6" />
-                    </svg>
-
-                    <div className="map-control-overlay">
-                      <span className="map-btn" role="button" aria-label="Zoom in">+</span>
-                      <span className="map-btn" role="button" aria-label="Zoom out">-</span>
-                    </div>
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <Phone size={20} />
                   </div>
+                  <div className="contact-detail-text">
+                    <h4>No. HP / WhatsApp</h4>
+                    <p>
+                      <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" className="contact-link">
+                        +62 813-2595-764
+                      </a>
+                    </p>
+                  </div>
+                </div>
 
-                  {/* Live Telemetry Chart panel */}
-                  <div className="dash-panel chart-panel">
-                    <div className="panel-header">Speed vs Time (Live Session Log)</div>
-                    <div style={{ position: 'relative', width: '100%', height: '80%' }}>
-                      {/* Telemetry line representation */}
-                      <svg viewBox="0 0 500 70" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }} aria-hidden="true">
-                        <defs>
-                          <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                          </linearGradient>
-                        </defs>
-                        {/* Grid lines */}
-                        <line x1="0" y1="15" x2="500" y2="15" stroke="rgba(255,255,255,0.05)" strokeDasharray="3" />
-                        <line x1="0" y1="35" x2="500" y2="35" stroke="rgba(255,255,255,0.05)" strokeDasharray="3" />
-                        <line x1="0" y1="55" x2="500" y2="55" stroke="rgba(255,255,255,0.05)" strokeDasharray="3" />
-                        
-                        {/* Wave path */}
-                        <path
-                          fill="url(#chart-grad)"
-                          stroke="none"
-                          d="M 0 60 Q 30 20, 60 40 T 120 10 T 180 50 T 240 25 T 300 45 T 360 15 T 420 40 T 480 20 L 500 20 L 500 70 L 0 70 Z"
-                        />
-                        <path
-                          fill="none"
-                          stroke="#10b981"
-                          strokeWidth="2.0"
-                          d="M 0 60 Q 30 20, 60 40 T 120 10 T 180 50 T 240 25 T 300 45 T 360 15 T 420 40 T 480 20 L 500 20"
-                          filter="drop-shadow(0 0 3px rgba(16, 185, 129, 0.4))"
-                        />
-                        <circle cx="500" cy="20" r="3" fill="#10b981" />
-                      </svg>
-                      {/* Connection status footer in chart */}
-                      <div style={{ position: 'absolute', bottom: '2px', left: '6px', fontSize: '8px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                        <span>●</span> Connected
-                      </div>
-                    </div>
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <Activity size={20} />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Kategori Bisnis</h4>
+                    <p>Layanan Otomotif, Bisnis Lain (Tech)</p>
+                  </div>
+                </div>
+
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
+                    <Globe size={20} />
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Jam Operasional</h4>
+                    <p>Senin - Sabtu (Minggu: Tutup)</p>
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Quick Contact Form */}
+            <div className="contact-form-card">
+              <h3>Kirim Pesan</h3>
+              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+                <div className="form-group">
+                  <label htmlFor="contact-name">Nama Lengkap</label>
+                  <input type="text" id="contact-name" placeholder="Nama Anda" required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="contact-email">Alamat Email</label>
+                  <input type="email" id="contact-email" placeholder="nama@email.com" required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="contact-message">Pesan</label>
+                  <textarea id="contact-message" rows={4} placeholder="Tuliskan pesan Anda di sini..." required></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary w-full">
+                  Kirim Pesan <ArrowRightIcon />
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -517,10 +400,20 @@ export default function App() {
             {/* Brand details */}
             <div className="footer-brand">
               <h2>SYNCHROTECH</h2>
-              <p>
+              <p style={{ marginBottom: '16px' }}>
                 Advanced telemetry systems for racers who demand data-driven performance. 
                 Designed in Detroit, raced worldwide.
               </p>
+              <div className="footer-contact-details" style={{ fontSize: '12px', opacity: 0.85, display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '16px' }}>
+                <span style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                  <MapPin size={14} style={{ marginTop: '2px', flexShrink: 0 }} />
+                  <span>Jl. St., Karanggeringging, Sumpiuh, Kec. Sumpiuh, Kabupaten Banyumas, Jawa Tengah 53195, Indonesia</span>
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Phone size={14} style={{ flexShrink: 0 }} />
+                  <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>+62 813-2595-764</a>
+                </span>
+              </div>
             </div>
 
             {/* Links Column 1: Products */}
