@@ -31,7 +31,7 @@ const translations = {
     // Hero
     heroSubtitle: "From weekend track days to professional endurance racing. Capture, analyze, and optimize your performance with real-time data streaming and sub-millisecond precision.",
     exploreSystems: "EXPLORE SYSTEMS",
-    viewDemo: "VIEW DEMO",
+    viewDemo: "REQUEST DEMO",
     
     // Hardware lineup
     hardwareCategory: "Hardware Lineup",
@@ -121,7 +121,7 @@ const translations = {
     // Hero
     heroSubtitle: "Dari track day akhir pekan hingga balap ketahanan profesional. Rekam, analisis, dan tingkatkan performa Anda dengan streaming data real-time dan presisi sub-milidetik.",
     exploreSystems: "JELAJAHI SISTEM",
-    viewDemo: "LIHAT DEMO",
+    viewDemo: "AJUKAN DEMO",
     
     // Hardware lineup
     hardwareCategory: "Lini Perangkat Keras",
@@ -326,7 +326,7 @@ export default function App() {
             </ul>
           </nav>
           <div>
-            <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, t('buyOnline'))}>{t('buyOnline')}</button>
+            <button className="btn btn-secondary" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>{t('buyOnline')}</button>
           </div>
         </div>
       </header>
@@ -355,7 +355,7 @@ export default function App() {
               <button className="btn btn-primary" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>
                 {t('exploreSystems')} <ArrowRightIcon />
               </button>
-              <button className="btn btn-outline-white" onClick={(e) => triggerComingSoon(e, t('viewDemo'))}>
+              <button className="btn btn-outline-white" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 {t('viewDemo')} <Play size={14} fill="white" />
               </button>
             </div>
