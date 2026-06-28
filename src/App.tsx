@@ -18,6 +18,54 @@ export default function App() {
   // Live simulation states
   const [lapTime, setLapTime] = useState(0);
 
+  // Contact Form states
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+
+  // Coming Soon page state
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonPage, setComingSoonPage] = useState('');
+
+  const triggerComingSoon = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement>, pageName: string) => {
+    e.preventDefault();
+    setComingSoonPage(pageName);
+    setShowComingSoon(true);
+  };
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName || !contactEmail || !contactMessage) return;
+    setSubmitStatus('submitting');
+    
+    // ponytail: simulate API request with simple timeout, upgrade to real endpoint when ready
+    setTimeout(() => {
+      setSubmitStatus('success');
+      // ponytail: open Gmail compose tab in browser
+      window.open(getGmailUrl(), '_blank');
+    }, 1200);
+  };
+
+  const handleResetForm = () => {
+    setContactName('');
+    setContactEmail('');
+    setContactMessage('');
+    setSubmitStatus('idle');
+  };
+
+  const getMailtoUrl = () => {
+    const subject = `Kontak dari ${contactName} - SynchroTech`;
+    const body = `Nama: ${contactName}\nEmail: ${contactEmail}\n\nPesan:\n${contactMessage}`;
+    return `mailto:synchrotechrace@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const getGmailUrl = () => {
+    const subject = `Kontak dari ${contactName} - SynchroTech`;
+    const body = `Nama: ${contactName}\nEmail: ${contactEmail}\n\nPesan:\n${contactMessage}`;
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=synchrotechrace@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   // Update Lap timer
   useEffect(() => {
     const timerInterval = setInterval(() => {
@@ -41,17 +89,26 @@ export default function App() {
     return `${minutes}:${parseFloat(seconds) < 10 ? '0' : ''}${seconds}`;
   };
 
+  if (showComingSoon) {
+    return (
+      <ComingSoon 
+        pageName={comingSoonPage} 
+        onClose={() => setShowComingSoon(false)} 
+      />
+    );
+  }
+
   return (
     <div>
       {/* Top utility navigation */}
       <nav className="top-utility-bar" aria-label="Utility Links">
         <div className="container">
           <div className="links">
-            <a href="#documentation">Documentation</a>
-            <a href="#forum">Forum</a>
-            <a href="#dealer">Dealer Portal</a>
+            <a href="#documentation" onClick={(e) => triggerComingSoon(e, 'Documentation & APIs')}>Documentation</a>
+            <a href="#forum" onClick={(e) => triggerComingSoon(e, 'Community Forum')}>Forum</a>
+            <a href="#dealer" onClick={(e) => triggerComingSoon(e, 'Dealer Portal')}>Dealer Portal</a>
           </div>
-          <div className="global-selector" role="button" tabIndex={0}>
+          <div className="global-selector" role="button" tabIndex={0} onClick={(e) => triggerComingSoon(e, 'Global Language Selector')}>
             <Globe size={12} />
             <span>Global (EN)</span>
           </div>
@@ -71,13 +128,13 @@ export default function App() {
           <nav aria-label="Main Navigation">
             <ul className="nav-menu">
               <li><a href="#products">Products</a></li>
-              <li><a href="#solutions">Solutions</a></li>
-              <li><a href="#support">Support</a></li>
-              <li><a href="#community">Community</a></li>
+              <li><a href="#solutions" onClick={(e) => triggerComingSoon(e, 'Solutions')}>Solutions</a></li>
+              <li><a href="#support" onClick={(e) => triggerComingSoon(e, 'Technical Support Services')}>Support</a></li>
+              <li><a href="#community" onClick={(e) => triggerComingSoon(e, 'Community Hub')}>Community</a></li>
             </ul>
           </nav>
           <div>
-            <button className="btn btn-secondary">Buy Online</button>
+            <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, 'Online Shopping Store')}>Buy Online</button>
           </div>
         </div>
       </header>
@@ -100,7 +157,7 @@ export default function App() {
               <button className="btn btn-primary" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>
                 EXPLORE SYSTEMS <ArrowRightIcon />
               </button>
-              <button className="btn btn-outline-white" onClick={() => document.getElementById('software')?.scrollIntoView({ behavior: 'smooth' })}>
+              <button className="btn btn-outline-white" onClick={(e) => triggerComingSoon(e, 'Interactive Telemetry Software Demo Video')}>
                 VIEW DEMO <Play size={14} fill="white" />
               </button>
             </div>
@@ -129,12 +186,12 @@ export default function App() {
               <p className="card-subtitle">Precision Energy Logger</p>
               <ul className="card-features">
                 <li><Check /> ADS1256 24-bit ADC</li>
-                <li><Check /> Manganin Shunt 50A (0.1%)</li>
+                 <li><Check /> Manganin Shunt 50A (0.1%)</li>
                 <li><Check /> Isolated CAN + WiFi/BLE</li>
               </ul>
-              <button className="btn btn-outline-dark">Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, 'Joulemeter Precision Logger Details')}>Learn More <ArrowRightIcon /></button>
             </article>
-
+ 
             {/* Card 2: Nexus One (Highlighted / Popular) */}
             <article className="card highlighted">
               <span className="card-badge badge-blue">Most Popular</span>
@@ -150,9 +207,9 @@ export default function App() {
                 <li><Check /> Standalone Li-Po 2000mAh</li>
                 <li><Check /> Auto-Charging via M12 IP67</li>
               </ul>
-              <button className="btn btn-secondary">Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, 'Nexus One 4G LTE Transceiver Details')}>Learn More <ArrowRightIcon /></button>
             </article>
-
+ 
             {/* Card 3: Display (Feature rich, live dynamic mockup) */}
             <article className="card">
               <span className="card-badge badge-purple">Driver Cockpit</span>
@@ -192,7 +249,7 @@ export default function App() {
                 <li className="purple-icon"><Check /> Auto Day/Night Theme via ALS</li>
                 <li className="purple-icon"><Check /> Cross-Venue Auto-Scaling</li>
               </ul>
-              <button className="btn btn-outline-dark">Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, 'Race-Grade Cockpit Display Details')}>Learn More <ArrowRightIcon /></button>
             </article>
           </div>
         </div>
@@ -272,7 +329,7 @@ export default function App() {
                 </li>
               </ul>
               
-              <a href="#podium" className="software-link">
+              <a href="#podium" className="software-link" onClick={(e) => triggerComingSoon(e, 'Live Telemetry Dashboard Sandbox')}>
                 View Live Demo Dashboard <ExternalLink size={14} />
               </a>
             </div>
@@ -348,6 +405,23 @@ export default function App() {
 
                 <div className="contact-detail-item">
                   <div className="contact-detail-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                  </div>
+                  <div className="contact-detail-text">
+                    <h4>Email</h4>
+                    <p>
+                      <a href="mailto:synchrotechrace@gmail.com" className="contact-link">
+                        synchrotechrace@gmail.com
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="contact-detail-item">
+                  <div className="contact-detail-icon">
                     <Activity size={20} />
                   </div>
                   <div className="contact-detail-text">
@@ -370,24 +444,95 @@ export default function App() {
 
             {/* Quick Contact Form */}
             <div className="contact-form-card">
-              <h3>Kirim Pesan</h3>
-              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-                <div className="form-group">
-                  <label htmlFor="contact-name">Nama Lengkap</label>
-                  <input type="text" id="contact-name" placeholder="Nama Anda" required />
+              {submitStatus === 'success' ? (
+                <div className="contact-success-view">
+                  <div className="success-icon-circle">
+                    <Check size={32} strokeWidth={3} />
+                  </div>
+                  <h3>Pesan Terkirim!</h3>
+                  <p>
+                    Terima kasih <strong>{contactName}</strong>. Kami telah membuka Gmail di tab baru untuk mengirim ke <strong>synchrotechrace@gmail.com</strong>.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+                    <a 
+                      href={getGmailUrl()} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn btn-primary w-full"
+                    >
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                        <rect width="20" height="16" x="2" y="4" rx="2" />
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                      </svg>
+                      Buka Gmail (Web)
+                    </a>
+                    <a 
+                      href={getMailtoUrl()} 
+                      className="btn btn-outline-dark w-full"
+                      style={{ border: '1px solid rgba(0, 0, 0, 0.15)' }}
+                    >
+                      Kirim via Aplikasi Email Lain
+                    </a>
+                  </div>
+                  <button onClick={handleResetForm} className="btn-link" style={{ marginTop: '16px' }}>
+                    Kirim pesan lain
+                  </button>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="contact-email">Alamat Email</label>
-                  <input type="email" id="contact-email" placeholder="nama@email.com" required />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="contact-message">Pesan</label>
-                  <textarea id="contact-message" rows={4} placeholder="Tuliskan pesan Anda di sini..." required></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary w-full">
-                  Kirim Pesan <ArrowRightIcon />
-                </button>
-              </form>
+              ) : (
+                <form className="contact-form" onSubmit={handleContactSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="contact-name">Nama Lengkap</label>
+                    <input 
+                      type="text" 
+                      id="contact-name" 
+                      placeholder="Nama Anda" 
+                      required 
+                      value={contactName}
+                      onChange={(e) => setContactName(e.target.value)}
+                      disabled={submitStatus === 'submitting'}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="contact-email">Alamat Email</label>
+                    <input 
+                      type="email" 
+                      id="contact-email" 
+                      placeholder="nama@email.com" 
+                      required 
+                      value={contactEmail}
+                      onChange={(e) => setContactEmail(e.target.value)}
+                      disabled={submitStatus === 'submitting'}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="contact-message">Pesan</label>
+                    <textarea 
+                      id="contact-message" 
+                      rows={4} 
+                      placeholder="Tuliskan pesan Anda di sini..." 
+                      required
+                      value={contactMessage}
+                      onChange={(e) => setContactMessage(e.target.value)}
+                      disabled={submitStatus === 'submitting'}
+                    ></textarea>
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary w-full"
+                    disabled={submitStatus === 'submitting'}
+                  >
+                    {submitStatus === 'submitting' ? (
+                      <>
+                        <RefreshCw size={14} className="spinner" /> Mengirim...
+                      </>
+                    ) : (
+                      <>
+                        Kirim Pesan <ArrowRightIcon />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -413,6 +558,13 @@ export default function App() {
                   <Phone size={14} style={{ flexShrink: 0 }} />
                   <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>+62 813-2595-764</a>
                 </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                  <a href="mailto:synchrotechrace@gmail.com" style={{ textDecoration: 'underline' }}>synchrotechrace@gmail.com</a>
+                </span>
               </div>
             </div>
 
@@ -420,10 +572,10 @@ export default function App() {
             <div className="footer-column">
               <h3>Products</h3>
               <ul className="footer-links">
-                <li><a href="#joulemeter">Joulemeter</a></li>
-                <li><a href="#nexus-one">Nexus One</a></li>
-                <li><a href="#display">Display</a></li>
-                <li><a href="#hub-cables">Nexus Hub & Cables</a></li>
+                <li><a href="#joulemeter" onClick={(e) => triggerComingSoon(e, 'Joulemeter product page')}>Joulemeter</a></li>
+                <li><a href="#nexus-one" onClick={(e) => triggerComingSoon(e, 'Nexus One product page')}>Nexus One</a></li>
+                <li><a href="#display" onClick={(e) => triggerComingSoon(e, 'Race-Grade Cockpit Display details')}>Display</a></li>
+                <li><a href="#hub-cables" onClick={(e) => triggerComingSoon(e, 'Hubs & Cables accessories')}>Nexus Hub & Cables</a></li>
               </ul>
             </div>
 
@@ -431,10 +583,10 @@ export default function App() {
             <div className="footer-column">
               <h3>Support</h3>
               <ul className="footer-links">
-                <li><a href="#kb">Knowledge Base</a></li>
-                <li><a href="#downloads">Software Downloads</a></li>
-                <li><a href="#forum">Community Forum</a></li>
-                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#kb" onClick={(e) => triggerComingSoon(e, 'Knowledge Base & APIs')}>Knowledge Base</a></li>
+                <li><a href="#downloads" onClick={(e) => triggerComingSoon(e, 'Software & Firmware Downloads')}>Software Downloads</a></li>
+                <li><a href="#forum" onClick={(e) => triggerComingSoon(e, 'Community Forum')}>Community Forum</a></li>
+                <li><a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>Contact Us</a></li>
               </ul>
             </div>
 
@@ -442,19 +594,19 @@ export default function App() {
             <div className="footer-column">
               <h3>Stay Connected</h3>
               <div className="social-links">
-                <a href="#facebook" className="social-icon" aria-label="Facebook">
+                <a href="#facebook" className="social-icon" aria-label="Facebook" onClick={(e) => triggerComingSoon(e, 'SynchroTech Facebook Page')}>
                   {/* Custom Facebook SVG Logo */}
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                   </svg>
                 </a>
-                <a href="#twitter" className="social-icon" aria-label="Twitter/X">
+                <a href="#twitter" className="social-icon" aria-label="Twitter/X" onClick={(e) => triggerComingSoon(e, 'SynchroTech X/Twitter Profile')}>
                   {/* Custom X Logo SVG */}
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </a>
-                <a href="#youtube" className="social-icon" aria-label="YouTube">
+                <a href="#youtube" className="social-icon" aria-label="YouTube" onClick={(e) => triggerComingSoon(e, 'SynchroTech YouTube Channel')}>
                   {/* Custom Youtube SVG Logo */}
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
                     <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -463,7 +615,7 @@ export default function App() {
               </div>
               <div>
                 {/* Language Select button */}
-                <button className="lang-selector">
+                <button className="lang-selector" onClick={(e) => triggerComingSoon(e, 'Language & Region Selector')}>
                   <Globe size={14} />
                   <span>English (US)</span>
                 </button>
@@ -477,12 +629,48 @@ export default function App() {
               © 2023 SynchroTech Racing Systems. All rights reserved.
             </div>
             <div className="footer-bottom-links">
-              <a href="#privacy">Privacy Policy</a>
-              <a href="#terms">Terms of Service</a>
+              <a href="#privacy" onClick={(e) => triggerComingSoon(e, 'Privacy Policy')}>Privacy Policy</a>
+              <a href="#terms" onClick={(e) => triggerComingSoon(e, 'Terms of Service')}>Terms of Service</a>
             </div>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+// Coming Soon Page Component
+interface ComingSoonProps {
+  pageName: string;
+  onClose: () => void;
+}
+
+function ComingSoon({ pageName, onClose }: ComingSoonProps) {
+  return (
+    <div className="coming-soon-page">
+      <div className="grid-bg"></div>
+      <div className="glow-orb glow-1"></div>
+      <div className="glow-orb glow-2"></div>
+      
+      <div className="coming-soon-content">
+        <div className="coming-soon-icon">
+          <Cpu className="pulse-icon" size={48} />
+        </div>
+        <span className="category">SYSTEM UPDATE</span>
+        <h1>COMING SOON</h1>
+        <p className="coming-soon-desc">
+          Halaman <strong>{pageName}</strong> sedang dikembangkan untuk melengkapi sistem telemetri presisi SynchroTech.
+        </p>
+        
+        <div className="loading-bar-container">
+          <div className="loading-bar-progress"></div>
+          <div className="loading-bar-text">ESTABLISHING TELEMETRY STREAM... 87%</div>
+        </div>
+
+        <button className="btn btn-primary" onClick={onClose}>
+          KEMBALI KE BERANDA
+        </button>
+      </div>
     </div>
   );
 }
