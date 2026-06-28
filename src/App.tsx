@@ -14,7 +14,198 @@ import {
   Phone
 } from 'lucide-react';
 
+const translations = {
+  en: {
+    // Nav & Utilities
+    documentation: "Documentation",
+    forum: "Forum",
+    dealerPortal: "Dealer Portal",
+    buyOnline: "Buy Online",
+    
+    // Header Nav
+    products: "Products",
+    solutions: "Solutions",
+    support: "Support",
+    community: "Community",
+    
+    // Hero
+    heroSubtitle: "From weekend track days to professional endurance racing. Capture, analyze, and optimize your performance with real-time data streaming and sub-millisecond precision.",
+    exploreSystems: "EXPLORE SYSTEMS",
+    viewDemo: "VIEW DEMO",
+    
+    // Hardware lineup
+    hardwareCategory: "Hardware Lineup",
+    hardwareTitle: "Choose Your Performance Tier",
+    hardwareSubtitle: "Three distinct systems engineered for specific racing environments.",
+    
+    // Cards
+    energySpecialist: "Energy Specialist",
+    joulemeterSubtitle: "Precision Energy Logger",
+    mostPopular: "Most Popular",
+    nexusSubtitle: "Brain & Mouth — 4G LTE Telemetry",
+    driverCockpit: "Driver Cockpit",
+    displaySubtitle: "The Eyes — Race-Grade Display",
+    learnMore: "Learn More",
+    
+    // Features
+    wirelessTitle: "Wireless Everything",
+    wirelessDesc: "Seamless connectivity via WiFi, Bluetooth 5.0, and 4G LTE. Stream data to the pits without cables.",
+    ioTitle: "Flexible I/O",
+    ioDesc: "Connect any sensor. Configurable analog inputs, RPM frequency, PWM outputs, and digital switching.",
+    imuTitle: "6-Axis IMU",
+    imuDesc: "High-precision accelerometer and gyroscope for detailed G-force mapping, pitch, and roll analysis.",
+    
+    // Software
+    softwareCategory: "Software",
+    softwareDesc: "Visualize your data instantly. Our cloud-based platform allows pit crews to monitor vehicle health and lap times from anywhere in the world. Customize your layout with drag-and-drop widgets.",
+    liveTelemetry: "Live Telemetry Streaming",
+    historicalAnalysis: "Historical Session Analysis",
+    socialComparison: "Social Sharing & Comparison",
+    viewLiveDemo: "View Live Demo Dashboard",
+    
+    // Contact
+    contactCategory: "Contact Us",
+    contactTitle: "Contact Our Team",
+    contactSubtitle: "Have questions about SynchroTech telemetry systems? Contact us directly.",
+    detailTitle: "Contact & Workshop Details",
+    detailDesc: "Please visit our workshop or contact us via WhatsApp/Email for quick support and product information.",
+    addressLabel: "Address",
+    whatsappLabel: "No. HP / WhatsApp",
+    emailLabel: "Email",
+    businessCategory: "Business Category",
+    businessDesc: "Automotive Services, Tech Business",
+    operationalHours: "Operational Hours",
+    operationalDesc: "Monday - Saturday (Sunday: Closed)",
+    
+    // Form
+    formTitle: "Send Message",
+    fullName: "Full Name",
+    namePlaceholder: "Your Name",
+    emailPlaceholder: "name@email.com",
+    messageLabel: "Message",
+    messagePlaceholder: "Write your message here...",
+    sendMessage: "Send Message",
+    sending: "Sending...",
+    sentTitle: "Message Sent!",
+    sentDesc: "Thank you {name}. We have opened Gmail in a new tab to send to {email}.",
+    sentGmailBtn: "Open Gmail (Web)",
+    sentOtherBtn: "Send via Other Email Client",
+    sendAnother: "Send another message",
+    
+    // Footer
+    footerDesc: "Advanced telemetry systems for racers who demand data-driven performance. Designed in Detroit, raced worldwide.",
+    stayConnected: "Stay Connected",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
+
+    // Coming Soon
+    systemUpdate: "SYSTEM UPDATE",
+    comingSoonTitle: "COMING SOON",
+    comingSoonDesc: "The page {page} is currently in active development to expand the SynchroTech ecosystem.",
+    backToHome: "BACK TO HOMEPAGE",
+    establishingTelemetry: "ESTABLISHING TELEMETRY STREAM... 87%"
+  },
+  id: {
+    // Nav & Utilities
+    documentation: "Dokumentasi",
+    forum: "Forum",
+    dealerPortal: "Portal Dealer",
+    buyOnline: "Beli Online",
+    
+    // Header Nav
+    products: "Produk",
+    solutions: "Solusi",
+    support: "Dukungan",
+    community: "Komunitas",
+    
+    // Hero
+    heroSubtitle: "Dari track day akhir pekan hingga balap ketahanan profesional. Rekam, analisis, dan tingkatkan performa Anda dengan streaming data real-time dan presisi sub-milidetik.",
+    exploreSystems: "JELAJAHI SISTEM",
+    viewDemo: "LIHAT DEMO",
+    
+    // Hardware lineup
+    hardwareCategory: "Lini Perangkat Keras",
+    hardwareTitle: "Pilih Tingkat Performa Anda",
+    hardwareSubtitle: "Tiga sistem berbeda yang dirancang khusus untuk lingkungan balapan tertentu.",
+    
+    // Cards
+    energySpecialist: "Spesialis Energi",
+    joulemeterSubtitle: "Perekam Energi Presisi",
+    mostPopular: "Paling Populer",
+    nexusSubtitle: "Otak & Mulut — Telemetri 4G LTE",
+    driverCockpit: "Kokpit Pengemudi",
+    displaySubtitle: "Mata — Layar Kelas Balap",
+    learnMore: "Pelajari Selengkapnya",
+    
+    // Features
+    wirelessTitle: "Serba Nirkabel",
+    wirelessDesc: "Konektivitas tanpa hambatan via WiFi, Bluetooth 5.0, dan 4G LTE. Kirim data ke pit tanpa kabel.",
+    ioTitle: "I/O Fleksibel",
+    ioDesc: "Hubungkan sensor apa pun. Input analog yang dapat dikonfigurasi, frekuensi RPM, output PWM, dan pensaklaran digital.",
+    imuTitle: "IMU 6-Axis",
+    imuDesc: "Akselerometer dan giroskop presisi tinggi untuk pemetaan gaya G, analisis pitch, dan roll yang mendetail.",
+    
+    // Software
+    softwareCategory: "Perangkat Lunak",
+    softwareDesc: "Visualisasikan data Anda secara instan. Platform berbasis cloud kami memungkinkan kru pit memantau kesehatan kendaraan dan waktu lap dari mana saja di dunia. Sesuaikan tata letak Anda dengan widget drag-and-drop.",
+    liveTelemetry: "Streaming Telemetri Langsung",
+    historicalAnalysis: "Analisis Sesi Historis",
+    socialComparison: "Berbagi Sosial & Perbandingan",
+    viewLiveDemo: "Lihat Dasbor Demo Langsung",
+    
+    // Contact
+    contactCategory: "Hubungi Kami",
+    contactTitle: "Hubungi Tim Kami",
+    contactSubtitle: "Ada pertanyaan mengenai sistem telemetri SynchroTech? Hubungi kami langsung.",
+    detailTitle: "Detail Kontak & Workshop",
+    detailDesc: "Silakan kunjungi workshop kami atau hubungi kami melalui WhatsApp/Email untuk dukungan cepat dan informasi produk.",
+    addressLabel: "Alamat",
+    whatsappLabel: "No. HP / WhatsApp",
+    emailLabel: "Email",
+    businessCategory: "Kategori Bisnis",
+    businessDesc: "Layanan Otomotif, Bisnis Lain (Tech)",
+    operationalHours: "Jam Operasional",
+    operationalDesc: "Senin - Sabtu (Minggu: Tutup)",
+    
+    // Form
+    formTitle: "Kirim Pesan",
+    fullName: "Nama Lengkap",
+    namePlaceholder: "Nama Anda",
+    emailPlaceholder: "nama@email.com",
+    messageLabel: "Pesan",
+    messagePlaceholder: "Tuliskan pesan Anda di sini...",
+    sendMessage: "Kirim Pesan",
+    sending: "Mengirim...",
+    sentTitle: "Pesan Terkirim!",
+    sentDesc: "Terima kasih {name}. Kami telah membuka Gmail di tab baru untuk mengirim ke {email}.",
+    sentGmailBtn: "Buka Gmail (Web)",
+    sentOtherBtn: "Kirim via Aplikasi Email Lain",
+    sendAnother: "Kirim pesan lain",
+    
+    // Footer
+    footerDesc: "Sistem telemetri canggih untuk pembalap yang menuntut performa berbasis data. Dirancang di Detroit, diuji di lintasan balap dunia.",
+    stayConnected: "Tetap Terhubung",
+    privacyPolicy: "Kebijakan Privasi",
+    termsOfService: "Syarat & Ketentuan",
+
+    // Coming Soon
+    systemUpdate: "PEMBARUAN SISTEM",
+    comingSoonTitle: "SEGERA HADIR",
+    comingSoonDesc: "Halaman {page} sedang dikembangkan untuk melengkapi sistem telemetri presisi SynchroTech.",
+    backToHome: "KEMBALI KE BERANDA",
+    establishingTelemetry: "MEMBANGUN ALIRAN TELEMETRI... 87%"
+  }
+};
+
 export default function App() {
+  // Lang state (defaults to Indonesian)
+  const [lang, setLang] = useState<'en' | 'id'>('id');
+
+  // Translation helper
+  const t = (key: keyof typeof translations['en']) => {
+    return translations[lang][key];
+  };
+
   // Live simulation states
   const [lapTime, setLapTime] = useState(0);
 
@@ -94,6 +285,7 @@ export default function App() {
       <ComingSoon 
         pageName={comingSoonPage} 
         onClose={() => setShowComingSoon(false)} 
+        lang={lang}
       />
     );
   }
@@ -104,13 +296,13 @@ export default function App() {
       <nav className="top-utility-bar" aria-label="Utility Links">
         <div className="container">
           <div className="links">
-            <a href="#documentation" onClick={(e) => triggerComingSoon(e, 'Documentation & APIs')}>Documentation</a>
-            <a href="#forum" onClick={(e) => triggerComingSoon(e, 'Community Forum')}>Forum</a>
-            <a href="#dealer" onClick={(e) => triggerComingSoon(e, 'Dealer Portal')}>Dealer Portal</a>
+            <a href="#documentation" onClick={(e) => triggerComingSoon(e, t('documentation'))}>{t('documentation')}</a>
+            <a href="#forum" onClick={(e) => triggerComingSoon(e, t('forum'))}>{t('forum')}</a>
+            <a href="#dealer" onClick={(e) => triggerComingSoon(e, t('dealerPortal'))}>{t('dealerPortal')}</a>
           </div>
-          <div className="global-selector" role="button" tabIndex={0} onClick={(e) => triggerComingSoon(e, 'Global Language Selector')}>
+          <div className="global-selector" role="button" tabIndex={0} onClick={() => setLang(lang === 'en' ? 'id' : 'en')}>
             <Globe size={12} />
-            <span>Global (EN)</span>
+            <span>{lang === 'en' ? 'English (EN)' : 'Bahasa Indonesia (ID)'}</span>
           </div>
         </div>
       </nav>
@@ -127,14 +319,14 @@ export default function App() {
           </a>
           <nav aria-label="Main Navigation">
             <ul className="nav-menu">
-              <li><a href="#products">Products</a></li>
-              <li><a href="#solutions" onClick={(e) => triggerComingSoon(e, 'Solutions')}>Solutions</a></li>
-              <li><a href="#support" onClick={(e) => triggerComingSoon(e, 'Technical Support Services')}>Support</a></li>
-              <li><a href="#community" onClick={(e) => triggerComingSoon(e, 'Community Hub')}>Community</a></li>
+              <li><a href="#products">{t('products')}</a></li>
+              <li><a href="#solutions" onClick={(e) => triggerComingSoon(e, t('solutions'))}>{t('solutions')}</a></li>
+              <li><a href="#support" onClick={(e) => triggerComingSoon(e, t('support'))}>{t('support')}</a></li>
+              <li><a href="#community" onClick={(e) => triggerComingSoon(e, t('community'))}>{t('community')}</a></li>
             </ul>
           </nav>
           <div>
-            <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, 'Online Shopping Store')}>Buy Online</button>
+            <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, t('buyOnline'))}>{t('buyOnline')}</button>
           </div>
         </div>
       </header>
@@ -144,21 +336,27 @@ export default function App() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              Precision <br />
-              Telemetry For <br />
-              <span className="text-purple">Every Track Level</span>
+              {lang === 'en' ? (
+                <>
+                  Precision <br />
+                  Telemetry For <br />
+                  <span className="text-purple">Every Track Level</span>
+                </>
+              ) : (
+                <>
+                  Telemetri <br />
+                  Presisi Untuk <br />
+                  <span className="text-purple">Setiap Level Lintasan</span>
+                </>
+              )}
             </h1>
-            <p>
-              From weekend track days to professional endurance racing. Capture, 
-              analyze, and optimize your performance with real-time data streaming and 
-              sub-millisecond precision.
-            </p>
+            <p>{t('heroSubtitle')}</p>
             <div className="hero-actions">
               <button className="btn btn-primary" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>
-                EXPLORE SYSTEMS <ArrowRightIcon />
+                {t('exploreSystems')} <ArrowRightIcon />
               </button>
-              <button className="btn btn-outline-white" onClick={(e) => triggerComingSoon(e, 'Interactive Telemetry Software Demo Video')}>
-                VIEW DEMO <Play size={14} fill="white" />
+              <button className="btn btn-outline-white" onClick={(e) => triggerComingSoon(e, t('viewDemo'))}>
+                {t('viewDemo')} <Play size={14} fill="white" />
               </button>
             </div>
           </div>
@@ -169,50 +367,50 @@ export default function App() {
       <section id="products" className="hardware-section" aria-labelledby="hardware-title">
         <div className="container">
           <div className="section-header">
-            <span className="category">Hardware Lineup</span>
-            <h2 id="hardware-title">Choose Your Performance Tier</h2>
-            <p>Three distinct systems engineered for specific racing environments.</p>
+            <span className="category">{t('hardwareCategory')}</span>
+            <h2 id="hardware-title">{t('hardwareTitle')}</h2>
+            <p>{t('hardwareSubtitle')}</p>
           </div>
 
           <div className="card-grid">
             {/* Card 1: Joulemeter */}
             <article className="card">
-              <span className="card-badge badge-dark">Energy Specialist</span>
+              <span className="card-badge badge-dark">{t('energySpecialist')}</span>
               <div className="card-media media-placeholder">
                 <div className="coming-soon">Coming Soon</div>
                 <div className="sub-text">Product photo in production</div>
               </div>
               <h3>Joulemeter</h3>
-              <p className="card-subtitle">Precision Energy Logger</p>
+              <p className="card-subtitle">{t('joulemeterSubtitle')}</p>
               <ul className="card-features">
                 <li><Check /> ADS1256 24-bit ADC</li>
                  <li><Check /> Manganin Shunt 50A (0.1%)</li>
                 <li><Check /> Isolated CAN + WiFi/BLE</li>
               </ul>
-              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, 'Joulemeter Precision Logger Details')}>Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, `Joulemeter - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
             </article>
- 
+
             {/* Card 2: Nexus One (Highlighted / Popular) */}
             <article className="card highlighted">
-              <span className="card-badge badge-blue">Most Popular</span>
+              <span className="card-badge badge-blue">{t('mostPopular')}</span>
               <div className="card-media media-placeholder">
                 <div className="coming-soon">Coming Soon</div>
                 <div className="sub-text">Product photo in production</div>
               </div>
               <h3>Nexus One</h3>
-              <p className="card-subtitle blue">Brain & Mouth — 4G LTE Telemetry</p>
+              <p className="card-subtitle blue">{t('nexusSubtitle')}</p>
               <ul className="card-features">
                 <li><Check /> 4G LTE Global (T-SIM7600G-H)</li>
                 <li><Check /> u-blox NEO-M9N 25Hz GNSS</li>
                 <li><Check /> Standalone Li-Po 2000mAh</li>
                 <li><Check /> Auto-Charging via M12 IP67</li>
               </ul>
-              <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, 'Nexus One 4G LTE Transceiver Details')}>Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, `Nexus One - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
             </article>
- 
+
             {/* Card 3: Display (Feature rich, live dynamic mockup) */}
             <article className="card">
-              <span className="card-badge badge-purple">Driver Cockpit</span>
+              <span className="card-badge badge-purple">{t('driverCockpit')}</span>
               <div className="card-media">
                 {/* Embedded live digital racing dashboard interface */}
                 <div className="display-mockup" aria-label="Simulated display device screen">
@@ -243,13 +441,13 @@ export default function App() {
                 </div>
               </div>
               <h3>Display</h3>
-              <p className="card-subtitle">The Eyes — Race-Grade Display</p>
+              <p className="card-subtitle">{t('displaySubtitle')}</p>
               <ul className="card-features">
                 <li className="purple-icon"><Check /> 5 View Modes (Race / Lap / Energy)</li>
                 <li className="purple-icon"><Check /> Auto Day/Night Theme via ALS</li>
                 <li className="purple-icon"><Check /> Cross-Venue Auto-Scaling</li>
               </ul>
-              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, 'Race-Grade Cockpit Display Details')}>Learn More <ArrowRightIcon /></button>
+              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, `Display - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
             </article>
           </div>
         </div>
@@ -263,33 +461,24 @@ export default function App() {
               <div className="feature-icon-wrapper icon-blue-bg">
                 <Radio />
               </div>
-              <h3>Wireless Everything</h3>
-              <p>
-                Seamless connectivity via WiFi, Bluetooth 5.0, and 4G LTE. 
-                Stream data to the pits without cables.
-              </p>
+              <h3>{t('wirelessTitle')}</h3>
+              <p>{t('wirelessDesc')}</p>
             </div>
             
             <div className="feature-item">
               <div className="feature-icon-wrapper icon-purple-bg">
                 <Sliders />
               </div>
-              <h3>Flexible I/O</h3>
-              <p>
-                Connect any sensor. Configurable analog inputs, RPM frequency, 
-                PWM outputs, and digital switching.
-              </p>
+              <h3>{t('ioTitle')}</h3>
+              <p>{t('ioDesc')}</p>
             </div>
             
             <div className="feature-item">
               <div className="feature-icon-wrapper icon-green-bg">
                 <Cpu />
               </div>
-              <h3>6-Axis IMU</h3>
-              <p>
-                High-precision accelerometer and gyroscope for detailed G-force 
-                mapping, pitch, and roll analysis.
-              </p>
+              <h3>{t('imuTitle')}</h3>
+              <p>{t('imuDesc')}</p>
             </div>
           </div>
         </div>
@@ -300,37 +489,39 @@ export default function App() {
         <div className="container">
           <div className="software-grid">
             <div className="software-info">
-              <span className="category">Software</span>
-              <h2 id="software-title">Real-Time Insight: <br />The Podium Dashboard</h2>
-              <p>
-                Visualize your data instantly. Our cloud-based platform allows pit 
-                crews to monitor vehicle health and lap times from anywhere in the world. 
-                Customize your layout with drag-and-drop widgets.
-              </p>
+              <span className="category">{t('softwareCategory')}</span>
+              <h2 id="software-title">
+                {lang === 'en' ? (
+                  <>Real-Time Insight: <br />The Podium Dashboard</>
+                ) : (
+                  <>Wawasan Real-Time: <br />Dasbor Podium</>
+                )}
+              </h2>
+              <p>{t('softwareDesc')}</p>
               
               <ul className="software-features-list">
                 <li className="software-feature-item">
                   <div className="software-feature-icon">
                     <Activity />
                   </div>
-                  <div className="software-feature-text">Live Telemetry Streaming</div>
+                  <div className="software-feature-text">{t('liveTelemetry')}</div>
                 </li>
                 <li className="software-feature-item">
                   <div className="software-feature-icon">
                     <RefreshCw />
                   </div>
-                  <div className="software-feature-text">Historical Session Analysis</div>
+                  <div className="software-feature-text">{t('historicalAnalysis')}</div>
                 </li>
                 <li className="software-feature-item">
                   <div className="software-feature-icon">
                     <Share2 />
                   </div>
-                  <div className="software-feature-text">Social Sharing & Comparison</div>
+                  <div className="software-feature-text">{t('socialComparison')}</div>
                 </li>
               </ul>
               
-              <a href="#podium" className="software-link" onClick={(e) => triggerComingSoon(e, 'Live Telemetry Dashboard Sandbox')}>
-                View Live Demo Dashboard <ExternalLink size={14} />
+              <a href="#podium" className="software-link" onClick={(e) => triggerComingSoon(e, t('viewLiveDemo'))}>
+                {t('viewLiveDemo')} <ExternalLink size={14} />
               </a>
             </div>
 
@@ -365,18 +556,16 @@ export default function App() {
       <section id="contact" className="contact-section" aria-labelledby="contact-title">
         <div className="container">
           <div className="section-header">
-            <span className="category">Hubungi Kami</span>
-            <h2 id="contact-title">Contact Our Team</h2>
-            <p>Ada pertanyaan mengenai sistem telemetri SynchroTech? Hubungi kami langsung.</p>
+            <span className="category">{t('contactCategory')}</span>
+            <h2 id="contact-title">{t('contactTitle')}</h2>
+            <p>{t('contactSubtitle')}</p>
           </div>
 
           <div className="contact-grid">
             {/* Contact Info Card */}
             <div className="contact-info-card">
-              <h3>Detail Kontak & Workshop</h3>
-              <p className="contact-desc">
-                Silakan kunjungi workshop kami atau hubungi kami melalui WhatsApp untuk dukungan cepat dan informasi produk.
-              </p>
+              <h3>{t('detailTitle')}</h3>
+              <p className="contact-desc">{t('detailDesc')}</p>
               
               <div className="contact-details-list">
                 <div className="contact-detail-item">
@@ -384,7 +573,7 @@ export default function App() {
                     <MapPin size={20} />
                   </div>
                   <div className="contact-detail-text">
-                    <h4>Alamat</h4>
+                    <h4>{t('addressLabel')}</h4>
                     <p>Jl. St., Karanggeringging, Sumpiuh, Kec. Sumpiuh, Kabupaten Banyumas, Jawa Tengah 53195, Indonesia</p>
                   </div>
                 </div>
@@ -394,7 +583,7 @@ export default function App() {
                     <Phone size={20} />
                   </div>
                   <div className="contact-detail-text">
-                    <h4>No. HP / WhatsApp</h4>
+                    <h4>{t('whatsappLabel')}</h4>
                     <p>
                       <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" className="contact-link">
                         +62 813-2595-764
@@ -411,7 +600,7 @@ export default function App() {
                     </svg>
                   </div>
                   <div className="contact-detail-text">
-                    <h4>Email</h4>
+                    <h4>{t('emailLabel')}</h4>
                     <p>
                       <a href="mailto:synchrotechrace@gmail.com" className="contact-link">
                         synchrotechrace@gmail.com
@@ -425,8 +614,8 @@ export default function App() {
                     <Activity size={20} />
                   </div>
                   <div className="contact-detail-text">
-                    <h4>Kategori Bisnis</h4>
-                    <p>Layanan Otomotif, Bisnis Lain (Tech)</p>
+                    <h4>{t('businessCategory')}</h4>
+                    <p>{t('businessDesc')}</p>
                   </div>
                 </div>
 
@@ -435,8 +624,8 @@ export default function App() {
                     <Globe size={20} />
                   </div>
                   <div className="contact-detail-text">
-                    <h4>Jam Operasional</h4>
-                    <p>Senin - Sabtu (Minggu: Tutup)</p>
+                    <h4>{t('operationalHours')}</h4>
+                    <p>{t('operationalDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -449,9 +638,9 @@ export default function App() {
                   <div className="success-icon-circle">
                     <Check size={32} strokeWidth={3} />
                   </div>
-                  <h3>Pesan Terkirim!</h3>
+                  <h3>{t('sentTitle')}</h3>
                   <p>
-                    Terima kasih <strong>{contactName}</strong>. Kami telah membuka Gmail di tab baru untuk mengirim ke <strong>synchrotechrace@gmail.com</strong>.
+                    {t('sentDesc').replace('{name}', contactName).replace('{email}', 'synchrotechrace@gmail.com')}
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
                     <a 
@@ -464,28 +653,28 @@ export default function App() {
                         <rect width="20" height="16" x="2" y="4" rx="2" />
                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                       </svg>
-                      Buka Gmail (Web)
+                      {t('sentGmailBtn')}
                     </a>
                     <a 
                       href={getMailtoUrl()} 
                       className="btn btn-outline-dark w-full"
                       style={{ border: '1px solid rgba(0, 0, 0, 0.15)' }}
                     >
-                      Kirim via Aplikasi Email Lain
+                      {t('sentOtherBtn')}
                     </a>
                   </div>
                   <button onClick={handleResetForm} className="btn-link" style={{ marginTop: '16px' }}>
-                    Kirim pesan lain
+                    {t('sendAnother')}
                   </button>
                 </div>
               ) : (
                 <form className="contact-form" onSubmit={handleContactSubmit}>
                   <div className="form-group">
-                    <label htmlFor="contact-name">Nama Lengkap</label>
+                    <label htmlFor="contact-name">{t('fullName')}</label>
                     <input 
                       type="text" 
                       id="contact-name" 
-                      placeholder="Nama Anda" 
+                      placeholder={t('namePlaceholder')} 
                       required 
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
@@ -493,11 +682,11 @@ export default function App() {
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="contact-email">Alamat Email</label>
+                    <label htmlFor="contact-email">{t('emailLabel')}</label>
                     <input 
                       type="email" 
                       id="contact-email" 
-                      placeholder="nama@email.com" 
+                      placeholder={t('emailPlaceholder')} 
                       required 
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
@@ -505,11 +694,11 @@ export default function App() {
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="contact-message">Pesan</label>
+                    <label htmlFor="contact-message">{t('messageLabel')}</label>
                     <textarea 
                       id="contact-message" 
                       rows={4} 
-                      placeholder="Tuliskan pesan Anda di sini..." 
+                      placeholder={t('messagePlaceholder')} 
                       required
                       value={contactMessage}
                       onChange={(e) => setContactMessage(e.target.value)}
@@ -523,11 +712,11 @@ export default function App() {
                   >
                     {submitStatus === 'submitting' ? (
                       <>
-                        <RefreshCw size={14} className="spinner" /> Mengirim...
+                        <RefreshCw size={14} className="spinner" /> {t('sending')}
                       </>
                     ) : (
                       <>
-                        Kirim Pesan <ArrowRightIcon />
+                        {t('sendMessage')} <ArrowRightIcon />
                       </>
                     )}
                   </button>
@@ -545,10 +734,7 @@ export default function App() {
             {/* Brand details */}
             <div className="footer-brand">
               <h2>SYNCHROTECH</h2>
-              <p style={{ marginBottom: '16px' }}>
-                Advanced telemetry systems for racers who demand data-driven performance. 
-                Designed in Detroit, raced worldwide.
-              </p>
+              <p style={{ marginBottom: '16px' }}>{t('footerDesc')}</p>
               <div className="footer-contact-details" style={{ fontSize: '12px', opacity: 0.85, display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '16px' }}>
                 <span style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                   <MapPin size={14} style={{ marginTop: '2px', flexShrink: 0 }} />
@@ -570,29 +756,29 @@ export default function App() {
 
             {/* Links Column 1: Products */}
             <div className="footer-column">
-              <h3>Products</h3>
+              <h3>{t('products')}</h3>
               <ul className="footer-links">
-                <li><a href="#joulemeter" onClick={(e) => triggerComingSoon(e, 'Joulemeter product page')}>Joulemeter</a></li>
-                <li><a href="#nexus-one" onClick={(e) => triggerComingSoon(e, 'Nexus One product page')}>Nexus One</a></li>
-                <li><a href="#display" onClick={(e) => triggerComingSoon(e, 'Race-Grade Cockpit Display details')}>Display</a></li>
-                <li><a href="#hub-cables" onClick={(e) => triggerComingSoon(e, 'Hubs & Cables accessories')}>Nexus Hub & Cables</a></li>
+                <li><a href="#joulemeter" onClick={(e) => triggerComingSoon(e, `${t('products')} - Joulemeter`)}>Joulemeter</a></li>
+                <li><a href="#nexus-one" onClick={(e) => triggerComingSoon(e, `${t('products')} - Nexus One`)}>Nexus One</a></li>
+                <li><a href="#display" onClick={(e) => triggerComingSoon(e, `${t('products')} - Display`)}>Display</a></li>
+                <li><a href="#hub-cables" onClick={(e) => triggerComingSoon(e, `${t('products')} - Nexus Hub & Cables`)}>Nexus Hub & Cables</a></li>
               </ul>
             </div>
 
             {/* Links Column 2: Support */}
             <div className="footer-column">
-              <h3>Support</h3>
+              <h3>{t('support')}</h3>
               <ul className="footer-links">
-                <li><a href="#kb" onClick={(e) => triggerComingSoon(e, 'Knowledge Base & APIs')}>Knowledge Base</a></li>
-                <li><a href="#downloads" onClick={(e) => triggerComingSoon(e, 'Software & Firmware Downloads')}>Software Downloads</a></li>
-                <li><a href="#forum" onClick={(e) => triggerComingSoon(e, 'Community Forum')}>Community Forum</a></li>
-                <li><a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>Contact Us</a></li>
+                <li><a href="#kb" onClick={(e) => triggerComingSoon(e, t('documentation'))}>{t('documentation')}</a></li>
+                <li><a href="#downloads" onClick={(e) => triggerComingSoon(e, 'Downloads')}>{t('forum')}</a></li>
+                <li><a href="#forum" onClick={(e) => triggerComingSoon(e, t('forum'))}>{t('forum')}</a></li>
+                <li><a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>{t('contactCategory')}</a></li>
               </ul>
             </div>
 
             {/* Brand connection & dropdown */}
             <div className="footer-column">
-              <h3>Stay Connected</h3>
+              <h3>{t('stayConnected')}</h3>
               <div className="social-links">
                 <a 
                   href="https://www.instagram.com/synchrotechrace?igsh=MTNpeWxvaGJpZGVqZw==" 
@@ -630,9 +816,9 @@ export default function App() {
               </div>
               <div>
                 {/* Language Select button */}
-                <button className="lang-selector" onClick={(e) => triggerComingSoon(e, 'Language & Region Selector')}>
+                <button className="lang-selector" onClick={() => setLang(lang === 'en' ? 'id' : 'en')}>
                   <Globe size={14} />
-                  <span>English (US)</span>
+                  <span>{lang === 'en' ? 'English (US)' : 'Bahasa Indonesia (ID)'}</span>
                 </button>
               </div>
             </div>
@@ -644,8 +830,8 @@ export default function App() {
               © 2023 SynchroTech Racing Systems. All rights reserved.
             </div>
             <div className="footer-bottom-links">
-              <a href="#privacy" onClick={(e) => triggerComingSoon(e, 'Privacy Policy')}>Privacy Policy</a>
-              <a href="#terms" onClick={(e) => triggerComingSoon(e, 'Terms of Service')}>Terms of Service</a>
+              <a href="#privacy" onClick={(e) => triggerComingSoon(e, t('privacyPolicy'))}>{t('privacyPolicy')}</a>
+              <a href="#terms" onClick={(e) => triggerComingSoon(e, t('termsOfService'))}>{t('termsOfService')}</a>
             </div>
           </div>
         </div>
@@ -658,9 +844,14 @@ export default function App() {
 interface ComingSoonProps {
   pageName: string;
   onClose: () => void;
+  lang: 'en' | 'id';
 }
 
-function ComingSoon({ pageName, onClose }: ComingSoonProps) {
+function ComingSoon({ pageName, onClose, lang }: ComingSoonProps) {
+  const t = (key: keyof typeof translations['en']) => {
+    return translations[lang][key];
+  };
+
   return (
     <div className="coming-soon-page">
       <div className="grid-bg"></div>
@@ -671,19 +862,19 @@ function ComingSoon({ pageName, onClose }: ComingSoonProps) {
         <div className="coming-soon-icon">
           <Cpu className="pulse-icon" size={48} />
         </div>
-        <span className="category">SYSTEM UPDATE</span>
-        <h1>COMING SOON</h1>
+        <span className="category">{t('systemUpdate')}</span>
+        <h1>{t('comingSoonTitle')}</h1>
         <p className="coming-soon-desc">
-          Halaman <strong>{pageName}</strong> sedang dikembangkan untuk melengkapi sistem telemetri presisi SynchroTech.
+          {t('comingSoonDesc').replace('{page}', pageName)}
         </p>
         
         <div className="loading-bar-container">
           <div className="loading-bar-progress"></div>
-          <div className="loading-bar-text">ESTABLISHING TELEMETRY STREAM... 87%</div>
+          <div className="loading-bar-text">{t('establishingTelemetry')}</div>
         </div>
 
         <button className="btn btn-primary" onClick={onClose}>
-          KEMBALI KE BERANDA
+          {t('backToHome')}
         </button>
       </div>
     </div>
