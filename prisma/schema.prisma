@@ -1,0 +1,64 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Customer {
+  id        Int       @id @default(autoincrement())
+  teamName  String    @map("team_name")
+  email     String?
+  phone     String?
+  notes     String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  licenses  License[]
+
+  @@map("customers")
+}
+
+enum LicenseStatus {
+  ACTIVE
+  INACTIVE
+  REVOKED
+}
+
+model License {
+  id          Int           @id @default(autoincrement())
+  customerId  Int           @map("customer_id")
+  customer    Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  licenseKey  String        @unique @map("license_key")
+  status      LicenseStatus @default(INACTIVE)
+  expiryDate  DateTime      @map("expiry_date")
+  maxDevices  Int           @default(1) @map("max_devices")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  devices     Device[]
+
+  @@map("licenses")
+}
+
+model Device {
+  id              Int      @id @default(autoincrement())
+  licenseId       Int      @map("license_id")
+  license         License  @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+  deviceId        String   @map("device_id")
+  deviceName      String   @map("device_name")
+  windowsUsername String   @map("windows_username")
+  activatedAt     DateTime @default(now()) @map("activated_at")
+  lastValidation  DateTime @default(now()) @map("last_validation")
+
+  @@unique([licenseId, deviceId])
+  @@map("devices")
+}

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { 
   Check, 
@@ -197,7 +199,7 @@ const translations = {
   }
 };
 
-export default function App() {
+export default function Page() {
   // Lang state (defaults to Indonesian)
   const [lang, setLang] = useState<'en' | 'id'>('id');
 
