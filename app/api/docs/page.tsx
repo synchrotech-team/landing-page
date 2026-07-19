@@ -16,8 +16,8 @@ const spec = {
   },
   servers: [
     {
-      url: 'http://localhost:3000/api/v1',
-      description: 'Development server',
+      url: '/api/v1',
+      description: 'Default Server (Dynamic)',
     },
   ],
   components: {
