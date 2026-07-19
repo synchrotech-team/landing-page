@@ -16,8 +16,12 @@ const spec = {
   },
   servers: [
     {
-      url: '/api/v1',
-      description: 'Default Server (Dynamic)',
+      url: 'https://synchrotech.site/api/v1',
+      description: 'Production server (synchrotech.site)',
+    },
+    {
+      url: 'http://localhost:3000/api/v1',
+      description: 'Development server (localhost)',
     },
   ],
   components: {
