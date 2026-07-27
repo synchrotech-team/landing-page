@@ -8,35 +8,54 @@ import {
   AlertTriangle, 
   XCircle,
   Clock,
-  ArrowRight
+  ArrowRight,
+  WifiOff
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
-  const [
-    totalLicenses,
-    activeLicenses,
-    inactiveLicenses,
-    revokedLicenses,
-    totalCustomers
-  ] = await Promise.all([
-    prisma.license.count(),
-    prisma.license.count({ where: { status: 'ACTIVE' } }),
-    prisma.license.count({ where: { status: 'INACTIVE' } }),
-    prisma.license.count({ where: { status: 'REVOKED' } }),
-    prisma.customer.count()
-  ]);
+  let totalLicenses = 0;
+  let activeLicenses = 0;
+  let inactiveLicenses = 0;
+  let revokedLicenses = 0;
+  let totalCustomers = 0;
+  let recentLicenses: any[] = [];
+  let dbError = false;
 
-  // Fetch recent licenses to display in a list
-  const recentLicenses = await prisma.license.findMany({
-    take: 5,
-    orderBy: { createdAt: 'desc' },
-    include: { 
-      customer: true,
-      devices: true
-    }
-  });
+  try {
+    const [
+      totLic,
+      actLic,
+      inactLic,
+      revLic,
+      totCust
+    ] = await Promise.all([
+      prisma.license.count(),
+      prisma.license.count({ where: { status: 'ACTIVE' } }),
+      prisma.license.count({ where: { status: 'INACTIVE' } }),
+      prisma.license.count({ where: { status: 'REVOKED' } }),
+      prisma.customer.count()
+    ]);
+
+    totalLicenses = totLic;
+    activeLicenses = actLic;
+    inactiveLicenses = inactLic;
+    revokedLicenses = revLic;
+    totalCustomers = totCust;
+
+    recentLicenses = await prisma.license.findMany({
+      take: 5,
+      orderBy: { createdAt: 'desc' },
+      include: { 
+        customer: true,
+        devices: true
+      }
+    });
+  } catch (err: any) {
+    console.error('Admin Dashboard Database Fetch Error:', err);
+    dbError = true;
+  }
 
   const stats = [
     { name: 'Total Customers', value: totalCustomers, icon: Users, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
@@ -47,9 +66,20 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="dash-card">
-      <h1 className="dash-title">System Overview</h1>
-      <p className="dash-subtitle">Statistik lisensi software desktop-link dan data customer secara real-time</p>
+    <div className="dash-card space-y-6">
+      <div>
+        <h1 className="dash-title">System Overview</h1>
+        <p className="dash-subtitle">Statistik lisensi software desktop-link dan data customer secara real-time</p>
+      </div>
+
+      {dbError && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm flex items-center space-x-3">
+          <WifiOff size={18} className="shrink-0" />
+          <span>
+            Gagal menghubungkan ke server database cloud (`db.prisma.io`). Silakan periksa koneksi internet Anda atau refresh halaman.
+          </span>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="stats-grid">
@@ -99,12 +129,12 @@ export default async function AdminDashboardPage() {
                       <td style={{ fontFamily: 'monospace', fontWeight: 600, color: '#a855f7' }}>
                         {lic.licenseKey}
                       </td>
-                      <td>{lic.customer.teamName}</td>
+                      <td>{lic.customer?.teamName || 'N/A'}</td>
                       <td>
-                        {lic.devices.length} / {lic.maxDevices}
+                        {lic.devices?.length || 0} / {lic.maxDevices}
                       </td>
                       <td>
-                        <span className={`badge badge-${lic.status.toLowerCase()}`}>
+                        <span className={`badge badge-${(lic.status || '').toLowerCase()}`}>
                           {lic.status}
                         </span>
                       </td>
@@ -146,8 +176,6 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }

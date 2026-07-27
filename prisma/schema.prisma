@@ -62,3 +62,54 @@ model Device {
   @@unique([licenseId, deviceId])
   @@map("devices")
 }
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  slug              String   @unique
+  name              String
+  subtitle          String?
+  subtitleEn        String?  @map("subtitle_en")
+  badge             String?
+  badgeEn           String?  @map("badge_en")
+  badgeType         String   @default("purple") @map("badge_type")
+  category          String
+  price             String
+  stockStatus       String   @default("Ready Stock") @map("stock_status")
+  stockStatusEn     String?  @map("stock_status_en")
+  description       String?  @db.Text
+  descriptionEn     String?  @map("description_en") @db.Text
+  longDescription   String?  @map("long_description") @db.Text
+  longDescriptionEn String?  @map("long_description_en") @db.Text
+  keySpecsJson      String?  @map("key_specs_json") @db.Text
+  keySpecsJsonEn    String?  @map("key_specs_json_en") @db.Text
+  image             String   @default("/products/joulemeter.png")
+  mockupType        String   @default("joulemeter") @map("mockup_type")
+  specsJson         String?  @map("specs_json") @db.Text
+  featuresJson      String?  @map("features_json") @db.Text
+  featuresJsonEn    String?  @map("features_json_en") @db.Text
+  inTheBoxJson      String?  @map("in_the_box_json") @db.Text
+  inTheBoxJsonEn    String?  @map("in_the_box_json_en") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model SoftwareRelease {
+  id              Int      @id @default(autoincrement())
+  title           String   @default("SynchroTech Race Telemetry Suite")
+  titleEn         String?  @default("SynchroTech Race Telemetry Suite") @map("title_en")
+  version         String   @default("v1.0.0")
+  releaseNotes    String?  @map("release_notes") @db.Text
+  releaseNotesEn  String?  @map("release_notes_en") @db.Text
+  osRequirements  String   @default("Windows 10/11 (64-bit)") @map("os_requirements")
+  fileUrl         String   @map("file_url")
+  fileName        String   @default("SynchroTech_Setup.exe") @map("file_name")
+  fileSize        String?  @default("45 MB") @map("file_size")
+  downloadCount   Int      @default(0) @map("download_count")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("software_releases")
+}

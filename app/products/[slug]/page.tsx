@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
   Check, 
-  Globe, 
   ArrowLeft, 
   ArrowRight, 
   ShieldCheck, 
@@ -21,10 +20,14 @@ import {
   MessageSquare, 
   FileText, 
   PackageCheck,
-  ChevronRight,
-  ExternalLink
+  ChevronRight
 } from 'lucide-react';
-import { PRODUCTS_DATA, Product } from '@/lib/products';
+import { PRODUCTS_DATA, Product, getLocalizedProduct } from '@/lib/products';
+import { Language, t } from '@/lib/i18n';
+import { Navbar } from '@/components/landing/navbar';
+import { Footer } from '@/components/landing/footer';
+import { ComingSoon } from '@/components/landing/coming-soon';
+import { MotionReveal } from '@/components/motion/reveal';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -34,13 +37,41 @@ export default function ProductDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const slug = resolvedParams.slug;
   const router = useRouter();
-  const product: Product | undefined = PRODUCTS_DATA[slug];
+  const [allProducts, setAllProducts] = useState<Product[]>(Object.values(PRODUCTS_DATA));
 
-  const [lang, setLang] = useState<'id' | 'en'>('id');
+  const [lang, setLang] = useState<Language>('id');
   const [activeViewTab, setActiveViewTab] = useState<'photo' | 'sim'>('photo');
   const [simLapTime, setSimLapTime] = useState(0);
   const [simCurrent, setSimCurrent] = useState(24.5);
   const [simLteRssi, setSimLteRssi] = useState(-68);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonPage, setComingSoonPage] = useState('');
+
+  useEffect(() => {
+    async function loadDynamicProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.products) && data.products.length > 0) {
+          setAllProducts(data.products);
+        }
+      } catch (err) {
+        console.error('Failed to fetch dynamic products detail:', err);
+      }
+    }
+    loadDynamicProducts();
+  }, []);
+
+  const rawProduct: Product | undefined = allProducts.find(p => p.slug === slug) || PRODUCTS_DATA[slug];
+
+  const toggleLang = () => {
+    setLang(prev => (prev === 'en' ? 'id' : 'en'));
+  };
+
+  const triggerComingSoon = (pageName: string) => {
+    setComingSoonPage(pageName);
+    setShowComingSoon(true);
+  };
 
   // Live simulation effect for mockups
   useEffect(() => {
@@ -76,559 +107,421 @@ export default function ProductDetailPage({ params }: PageProps) {
     }
   };
 
-  if (!product) {
+  if (showComingSoon) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#120720', color: '#fff' }}>
-        <header className="main-header">
-          <div className="container">
-            <Link href="/" className="logo">
-              <img src="/logotype.png" alt="SynchroTech" style={{ height: '36px', width: 'auto' }} />
-            </Link>
-          </div>
-        </header>
-        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', textAlign: 'center' }}>
+      <ComingSoon 
+        pageName={comingSoonPage} 
+        onClose={() => setShowComingSoon(false)} 
+        lang={lang} 
+      />
+    );
+  }
+
+  if (!rawProduct) {
+    return (
+      <div className="min-h-screen bg-background text-white flex flex-col justify-between">
+        <Navbar lang={lang} onToggleLang={toggleLang} onTriggerComingSoon={triggerComingSoon} />
+        <main className="flex-1 flex items-center justify-center py-20 text-center">
           <div>
-            <h1 style={{ fontSize: '28px', color: '#fff', marginBottom: '16px', fontFamily: 'var(--font-tech), sans-serif' }}>
-              Produk Tidak Ditemukan
+            <h1 className="font-display text-3xl font-bold text-white mb-4 uppercase">
+              {lang === 'id' ? 'Produk Tidak Ditemukan' : 'Product Not Found'}
             </h1>
-            <p style={{ color: '#9ca3af', marginBottom: '24px' }}>
-              Maaf, halaman detail untuk produk "{slug}" tidak ditemukan.
+            <p className="text-gray-400 mb-6 text-sm">
+              {lang === 'id' ? `Maaf, halaman detail untuk produk "${slug}" tidak ditemukan.` : `Sorry, detail page for "${slug}" was not found.`}
             </p>
-            <Link href="/#products" className="btn btn-primary">
-              Kembali ke Katalog Produk
+            <Link href="/products" className="px-6 py-3 rounded-xl bg-purple-electric text-white text-xs font-bold font-display uppercase tracking-wider">
+              {lang === 'id' ? 'Kembali ke Katalog Produk' : 'Return to Products Catalog'}
             </Link>
           </div>
         </main>
+        <Footer lang={lang} onToggleLang={toggleLang} onTriggerComingSoon={triggerComingSoon} />
       </div>
     );
   }
 
-  const waMessage = `Halo SynchroTech, saya tertarik untuk bertanya/memesan produk ${product.name} (${product.subtitle}). Mohon informasi lebih lanjut.`;
+  // Retrieve localized product details according to current language state
+  const product = getLocalizedProduct(rawProduct, lang);
+
+  const waMessage = lang === 'en' 
+    ? `Hello SynchroTech, I am interested in inquiring/ordering product ${product.name} (${product.subtitle}). Please provide more info.`
+    : `Halo SynchroTech, saya tertarik untuk bertanya/memesan produk ${product.name} (${product.subtitle}). Mohon informasi lebih lanjut.`;
+  
   const waUrl = `https://wa.me/628132595764?text=${encodeURIComponent(waMessage)}`;
 
-  const otherProducts = Object.values(PRODUCTS_DATA).filter(p => p.slug !== product.slug);
+  const otherProducts = allProducts
+    .filter(p => p.slug !== product.slug)
+    .map(p => getLocalizedProduct(p, lang));
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#120720', color: '#fff' }}>
-      {/* Top Utility Bar */}
-      <nav className="top-utility-bar" aria-label="Utility Links">
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className="links" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Link href="/#products" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#b8a8d0' }}>
-              <ArrowLeft size={12} /> {lang === 'id' ? 'Kembali ke Beranda' : 'Back to Home'}
-            </Link>
-            <span style={{ opacity: 0.3 }}>/</span>
-            <span style={{ color: '#A855F7', fontWeight: 600 }}>{product.name}</span>
-          </div>
-          <div className="global-selector" role="button" tabIndex={0} onClick={() => setLang(lang === 'en' ? 'id' : 'en')}>
-            <Globe size={12} />
-            <span>{lang === 'en' ? 'English (EN)' : 'Bahasa Indonesia (ID)'}</span>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-background text-white selection:bg-purple-electric selection:text-white flex flex-col justify-between">
+      {/* Floating Header Navbar */}
+      <Navbar 
+        lang={lang} 
+        onToggleLang={toggleLang} 
+        onTriggerComingSoon={triggerComingSoon} 
+      />
 
-      {/* Main Header */}
-      <header className="main-header">
-        <div className="container">
-          <Link href="/" className="logo">
-            <img src="/logotype.png" alt="SynchroTech" style={{ height: '36px', width: 'auto' }} />
-          </Link>
-          <nav>
-            <ul className="nav-menu" style={{ display: 'flex', gap: '24px', listStyle: 'none' }}>
-              <li><Link href="/#products" style={{ color: '#e2d6f5' }}>{lang === 'id' ? 'Semua Produk' : 'All Products'}</Link></li>
-              <li><Link href="/#contact" style={{ color: '#e2d6f5' }}>{lang === 'id' ? 'Kontak & Workshop' : 'Contact Us'}</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      {/* Product Main Showcase */}
-      <main style={{ flex: 1, padding: '40px 0 80px' }}>
-        <div className="container">
+      <main className="flex-1 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           {/* Breadcrumb path */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#9ca3af', marginBottom: '32px' }}>
-            <Link href="/" style={{ color: '#b8a8d0' }}>Beranda</Link>
-            <ChevronRight size={14} />
-            <Link href="/#products" style={{ color: '#b8a8d0' }}>Produk</Link>
-            <ChevronRight size={14} />
-            <span style={{ color: '#fff', fontWeight: 600 }}>{product.name}</span>
-          </div>
+          <MotionReveal>
+            <div className="flex items-center space-x-2 text-xs text-gray-400 mb-8 font-mono">
+              <Link href="/" className="hover:text-white transition-colors">
+                {lang === 'id' ? 'Beranda' : 'Home'}
+              </Link>
+              <ChevronRight size={14} />
+              <Link href="/products" className="hover:text-white transition-colors">
+                {lang === 'id' ? 'Produk' : 'Products'}
+              </Link>
+              <ChevronRight size={14} />
+              <span className="text-purple-electric font-semibold">{product.name}</span>
+            </div>
+          </MotionReveal>
 
           {/* Product Overview Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '40px',
-            alignItems: 'start',
-            marginBottom: '64px'
-          }}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-20">
             {/* Left Column: Visual Mockup Showcase */}
-            <div style={{
-              background: 'linear-gradient(135deg, rgba(26, 10, 46, 0.9) 0%, rgba(45, 27, 78, 0.9) 100%)',
-              border: '1px solid rgba(168, 85, 247, 0.3)',
-              borderRadius: '24px',
-              padding: '32px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              {/* Badge Overlay */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  padding: '6px 14px',
-                  borderRadius: '20px',
-                  backgroundColor: product.badgeType === 'blue' ? 'rgba(59, 130, 246, 0.25)' : product.badgeType === 'purple' ? 'rgba(168, 85, 247, 0.25)' : 'rgba(255, 255, 255, 0.15)',
-                  color: product.badgeType === 'blue' ? '#60A5FA' : product.badgeType === 'purple' ? '#C084FC' : '#E5E7EB',
-                  letterSpacing: '0.05em'
-                }}>
-                  {product.badge}
-                </span>
-                <span style={{ fontSize: '12px', color: '#10B981', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981', display: 'inline-block' }} />
-                  {product.stockStatus}
-                </span>
-              </div>
-
-              {/* View Mode Tab Switcher */}
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '10px' }}>
-                <button
-                  onClick={() => setActiveViewTab('photo')}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    backgroundColor: activeViewTab === 'photo' ? '#A855F7' : 'transparent',
-                    color: activeViewTab === 'photo' ? '#ffffff' : '#9ca3af',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {lang === 'id' ? 'Foto Perangkat' : 'Hardware Photo'}
-                </button>
-                <button
-                  onClick={() => setActiveViewTab('sim')}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    backgroundColor: activeViewTab === 'sim' ? '#A855F7' : 'transparent',
-                    color: activeViewTab === 'sim' ? '#ffffff' : '#9ca3af',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {lang === 'id' ? 'Simulasi Live Telemetri' : 'Live Telemetry Sim'}
-                </button>
-              </div>
-
-              {/* Dynamic Showcase Container */}
-              <div style={{
-                background: '#070b13',
-                border: '1px solid rgba(168, 85, 247, 0.2)',
-                borderRadius: '16px',
-                padding: activeViewTab === 'photo' ? '12px' : '24px',
-                minHeight: '280px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.8)',
-                overflow: 'hidden'
-              }}>
-                {activeViewTab === 'photo' ? (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      style={{ width: '100%', height: '260px', objectFit: 'cover', borderRadius: '12px' }} 
-                    />
+            <div className="lg:col-span-6">
+              <MotionReveal delay={0.1}>
+                <div className="rounded-3xl bg-surface border border-white/10 p-6 md:p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl relative overflow-hidden">
+                  {/* Badge & Stock Overlay */}
+                  <div className="flex justify-between items-center mb-6">
+                    <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold uppercase ${
+                      product.badgeType === 'blue' 
+                        ? 'bg-[#3B82F6]/20 text-[#60A5FA] border border-[#3B82F6]/30' 
+                        : product.badgeType === 'purple' 
+                        ? 'bg-purple-electric/20 text-[#C084FC] border border-purple-electric/30' 
+                        : 'bg-white/10 text-gray-300'
+                    }`}>
+                      {product.badge}
+                    </span>
+                    <span className="text-xs text-emerald-400 font-mono font-semibold flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>{product.stockStatus}</span>
+                    </span>
                   </div>
-                ) : (
-                  <>
-                    {product.mockupType === 'display' && (
-                      <div className="display-mockup" style={{ width: '100%' }}>
-                        <div className="top-row">
-                          <div>LAP 3/8</div>
-                          <div>04:22</div>
-                          <div className="lap-status">BAT 78%</div>
-                        </div>
-                        <div className="main-time">{formatTime(simLapTime)}</div>
-                        <div className="grid-stats">
-                          <div className="stat-item">
-                            <div className="stat-label">Target</div>
-                            <div className="stat-value green">4:22.5</div>
+
+                  {/* View Mode Tab Switcher */}
+                  <div className="flex space-x-2 p-1 bg-black/50 border border-white/10 rounded-xl mb-6">
+                    <button
+                      onClick={() => setActiveViewTab('photo')}
+                      className={`flex-1 py-2 rounded-lg text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
+                        activeViewTab === 'photo' 
+                          ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {lang === 'id' ? 'Foto Perangkat' : 'Hardware Photo'}
+                    </button>
+                    <button
+                      onClick={() => setActiveViewTab('sim')}
+                      className={`flex-1 py-2 rounded-lg text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
+                        activeViewTab === 'sim' 
+                          ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {lang === 'id' ? 'Simulasi Live Telemetri' : 'Live Telemetry Sim'}
+                    </button>
+                  </div>
+
+                  {/* Showcase Container */}
+                  <div className="w-full min-h-[300px] rounded-2xl bg-black border border-white/10 p-4 flex flex-col justify-center overflow-hidden mb-6 shadow-inner">
+                    {activeViewTab === 'photo' ? (
+                      <div className="w-full h-72 flex items-center justify-center">
+                        <img 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover rounded-xl" 
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full p-4">
+                        {product.mockupType === 'display' && (
+                          <div className="display-mockup w-full">
+                            <div className="top-row">
+                              <div>LAP 3/8</div>
+                              <div>04:22</div>
+                              <div className="text-emerald-400">BAT 78%</div>
+                            </div>
+                            <div className="main-time">{formatTime(simLapTime)}</div>
+                            <div className="grid-stats">
+                              <div className="stat-item">
+                                <div className="stat-label">Target</div>
+                                <div className="stat-value green">4:22.5</div>
+                              </div>
+                              <div className="stat-item">
+                                <div className="stat-label">Best</div>
+                                <div className="stat-value blue">4:18.2</div>
+                              </div>
+                              <div className="stat-item">
+                                <div className="stat-label">Last</div>
+                                <div className="stat-value">4:21.4</div>
+                              </div>
+                              <div className="stat-item">
+                                <div className="stat-label">Avg</div>
+                                <div className="stat-value orange">4:25.1</div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="stat-item">
-                            <div className="stat-label">Best</div>
-                            <div className="stat-value blue">4:18.2</div>
+                        )}
+
+                        {product.mockupType === 'nexus' && (
+                          <div className="font-mono text-xs text-sky-400 space-y-3">
+                            <div className="flex justify-between border-b border-white/10 pb-2">
+                              <span className="text-purple-electric font-bold">[NEXUS-1] TELEMETRY HUB</span>
+                              <span className="text-emerald-400">STATUS: ONLINE</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="bg-white/5 p-3 rounded-lg">
+                                <div className="text-[10px] text-gray-400">4G LTE NETWORK</div>
+                                <div className="text-sm font-bold text-sky-400 mt-1">GLOBAL LTE ({simLteRssi} dBm)</div>
+                              </div>
+                              <div className="bg-white/5 p-3 rounded-lg">
+                                <div className="text-[10px] text-gray-400">GNSS POSITION</div>
+                                <div className="text-sm font-bold text-emerald-400 mt-1">25Hz FIX (12 SATS)</div>
+                              </div>
+                            </div>
+                            <div className="bg-white/5 p-3 rounded-lg text-[11px] text-gray-300 space-y-1">
+                              <div>&gt; CAN Bus stream active: 100 msg/sec</div>
+                              <div>&gt; IMU Accel: X: +0.02G, Y: -0.85G, Z: +1.01G</div>
+                              <div>&gt; Internal Power: Li-Po 2000mAh (Charging 98%)</div>
+                            </div>
                           </div>
-                          <div className="stat-item">
-                            <div className="stat-label">Last</div>
-                            <div className="stat-value">4:21.4</div>
+                        )}
+
+                        {product.mockupType === 'joulemeter' && (
+                          <div className="font-mono text-xs text-amber-400 space-y-3">
+                            <div className="flex justify-between border-b border-white/10 pb-2">
+                              <span className="text-amber-500 font-bold">[JOULEMETER 24-BIT]</span>
+                              <span className="text-emerald-400">ADS1256 ACTIVE</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="bg-white/5 p-3 rounded-lg">
+                                <div className="text-[10px] text-gray-400">CURRENT READOUT</div>
+                                <div className="text-base font-bold text-amber-400 mt-1">{simCurrent} A</div>
+                              </div>
+                              <div className="bg-white/5 p-3 rounded-lg">
+                                <div className="text-[10px] text-gray-400">BUS VOLTAGE</div>
+                                <div className="text-base font-bold text-sky-400 mt-1">48.2 V</div>
+                              </div>
+                            </div>
+                            <div className="bg-white/5 p-3 rounded-lg text-[11px] text-gray-300 space-y-1">
+                              <div>&gt; Instantaneous Power: {(simCurrent * 48.2).toFixed(1)} Watts</div>
+                              <div>&gt; Total Energy Consumed: 142.8 Wh</div>
+                              <div>&gt; Shunt Temp: 34°C (Manganin 0.1% Nominal)</div>
+                            </div>
                           </div>
-                          <div className="stat-item">
-                            <div className="stat-label">Avg</div>
-                            <div className="stat-value orange">4:25.1</div>
-                          </div>
-                        </div>
+                        )}
                       </div>
                     )}
+                  </div>
 
-                    {product.mockupType === 'nexus' && (
-                      <div style={{ fontFamily: 'monospace', fontSize: '13px', color: '#38bdf8' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px', marginBottom: '16px' }}>
-                          <span style={{ color: '#a855f7', fontWeight: 'bold' }}>[NEXUS-1] TELEMETRY HUB</span>
-                          <span style={{ color: '#4ade80' }}>STATUS: ONLINE</span>
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-                          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                            <div style={{ fontSize: '10px', color: '#94a3b8' }}>4G LTE NETWORK</div>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#38bdf8', marginTop: '4px' }}>
-                              GLOBAL LTE ({simLteRssi} dBm)
-                            </div>
-                          </div>
-                          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                            <div style={{ fontSize: '10px', color: '#94a3b8' }}>GNSS POSITION</div>
-                            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#4ade80', marginTop: '4px' }}>
-                              25Hz FIX (12 SATS)
-                            </div>
-                          </div>
-                        </div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px', fontSize: '11px', color: '#cbd5e1' }}>
-                          <div>&gt; CAN Bus stream active: 100 msg/sec</div>
-                          <div>&gt; IMU Accel: X: +0.02G, Y: -0.85G, Z: +1.01G</div>
-                          <div>&gt; Internal Power: Li-Po 2000mAh (Charging 98%)</div>
-                        </div>
-                      </div>
-                    )}
-
-                    {product.mockupType === 'joulemeter' && (
-                      <div style={{ fontFamily: 'monospace', fontSize: '13px', color: '#fbbf24' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px', marginBottom: '16px' }}>
-                          <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>[JOULEMETER 24-BIT]</span>
-                          <span style={{ color: '#4ade80' }}>ADS1256 ACTIVE</span>
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-                          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                            <div style={{ fontSize: '10px', color: '#94a3b8' }}>CURRENT READOUT</div>
-                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fbbf24', marginTop: '4px' }}>
-                              {simCurrent} A
-                            </div>
-                          </div>
-                          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                            <div style={{ fontSize: '10px', color: '#94a3b8' }}>BUS VOLTAGE</div>
-                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#38bdf8', marginTop: '4px' }}>
-                              48.2 V
-                            </div>
-                          </div>
-                        </div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px', fontSize: '11px', color: '#cbd5e1' }}>
-                          <div>&gt; Instantaneous Power: {(simCurrent * 48.2).toFixed(1)} Watts</div>
-                          <div>&gt; Total Energy Consumed: 142.8 Wh</div>
-                          <div>&gt; Shunt Temp: 34°C (Manganin 0.1% Nominal)</div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-
-              {/* Specs Summary Checklist */}
-              <div style={{ marginTop: '24px' }}>
-                <h4 style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
-                  Spesifikasi Utama:
-                </h4>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {product.keySpecs.map((spec, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#e2d6f5' }}>
-                      <Check size={16} color="#A855F7" style={{ flexShrink: 0 }} />
-                      <span>{spec}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  {/* Specs Checklist */}
+                  <div className="border-t border-white/5 pt-4">
+                    <div className="text-[10px] text-gray-400 font-mono font-bold uppercase tracking-wider mb-3">
+                      {lang === 'id' ? 'Spesifikasi Utama:' : 'Key Specifications:'}
+                    </div>
+                    <ul className="space-y-2">
+                      {product.keySpecs.map((spec, i) => (
+                        <li key={i} className="flex items-center space-x-2 text-xs text-gray-300">
+                          <Check size={16} className="text-purple-electric shrink-0" />
+                          <span>{spec}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </MotionReveal>
             </div>
 
-            {/* Right Column: Title, Details, Price & Actions */}
-            <div>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: '#F7941D', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                {product.category}
-              </span>
-              <h1 style={{ fontSize: '36px', fontWeight: 800, color: '#ffffff', marginTop: '4px', marginBottom: '8px', fontFamily: 'var(--font-tech), sans-serif' }}>
-                {product.name}
-              </h1>
-              <p style={{ fontSize: '16px', color: '#a855f7', fontWeight: 600, marginBottom: '20px' }}>
-                {product.subtitle}
-              </p>
+            {/* Right Column: Title, Price & Action CTAs */}
+            <div className="lg:col-span-6">
+              <MotionReveal delay={0.2}>
+                <span className="font-mono text-xs font-bold text-orange-motorsport tracking-widest uppercase mb-2 block">
+                  {product.category}
+                </span>
+                <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight uppercase mb-2 leading-tight">
+                  {product.name}
+                </h1>
+                <p className="text-sm font-mono text-purple-electric font-semibold mb-6">
+                  {product.subtitle}
+                </p>
 
-              {/* Price Banner */}
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(168, 85, 247, 0.2)',
-                borderRadius: '16px',
-                padding: '20px 24px',
-                marginBottom: '24px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ fontSize: '11px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Harga Resmi / Unit:
+                {/* Price Box */}
+                <div className="bg-surface border border-white/10 rounded-2xl p-6 mb-8 flex justify-between items-center backdrop-blur-xl">
+                  <div>
+                    <div className="text-xs text-gray-400 font-mono uppercase tracking-wider">
+                      {lang === 'id' ? 'Harga Resmi / Unit:' : 'Official Price / Unit:'}
+                    </div>
+                    <div className="font-mono text-3xl font-bold text-white mt-1">
+                      {product.price}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-tech), sans-serif', marginTop: '2px' }}>
-                    {product.price}
+                  <div className="text-right">
+                    <span className="text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20 font-mono font-semibold">
+                      {product.stockStatus}
+                    </span>
                   </div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '11px', color: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.15)', padding: '4px 10px', borderRadius: '12px', fontWeight: 600 }}>
-                    {product.stockStatus}
-                  </span>
+
+                {/* Long Description */}
+                <p className="text-gray-300 text-sm leading-relaxed mb-8">
+                  {product.longDescription}
+                </p>
+
+                {/* Action Buttons */}
+                <div className="space-y-4 mb-8">
+                  <a 
+                    href={waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-4 rounded-xl bg-[#25D366] text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-3 hover:bg-[#20ba5a] transition-all duration-300 shadow-lg transform active:scale-95 cursor-pointer"
+                  >
+                    <MessageSquare size={18} />
+                    <span>{lang === 'id' ? `Tanya / Pesan ${product.name} via WhatsApp` : `Order ${product.name} via WhatsApp`}</span>
+                  </a>
+
+                  <Link 
+                    href="/#contact"
+                    className="w-full py-3.5 rounded-xl bg-purple-electric text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-3 hover:bg-[#9333EA] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 transform active:scale-95"
+                  >
+                    <FileText size={16} />
+                    <span>{lang === 'id' ? 'Kirim Pesan Inquiry / Demo' : 'Send Inquiry / Demo Message'}</span>
+                  </Link>
                 </div>
-              </div>
 
-              {/* Long Description */}
-              <p style={{ fontSize: '15px', color: '#d1c4e9', lineHeight: '1.7', marginBottom: '32px' }}>
-                {product.longDescription}
-              </p>
-
-              {/* CTA Action Buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px' }}>
-                <a 
-                  href={waUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    padding: '16px 24px',
-                    borderRadius: '12px',
-                    fontWeight: 700,
-                    fontSize: '15px',
-                    backgroundColor: '#25D366',
-                    color: '#ffffff',
-                    boxShadow: '0 8px 20px rgba(37, 211, 102, 0.3)',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <MessageSquare size={20} />
-                  {lang === 'id' ? `Tanya / Pesan ${product.name} via WhatsApp` : `Order ${product.name} via WhatsApp`}
-                </a>
-
-                <Link 
-                  href="/#contact"
-                  className="btn btn-primary"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    padding: '14px 24px',
-                    borderRadius: '12px',
-                    fontWeight: 600,
-                    fontSize: '14px'
-                  }}
-                >
-                  <FileText size={18} />
-                  {lang === 'id' ? 'Kirim Pesan Inquiry / Demo' : 'Send Inquiry Message'}
-                </Link>
-              </div>
-
-              {/* Guarantee items */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#9ca3af' }}>
-                  <ShieldCheck size={16} color="#A855F7" />
-                  <span>Garansi Resmi 1 Tahun</span>
+                {/* Trust Guarantee */}
+                <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                  <div className="flex items-center space-x-3 text-xs text-gray-400">
+                    <ShieldCheck size={18} className="text-purple-electric" />
+                    <span>{lang === 'id' ? 'Garansi Resmi 1 Tahun' : '1 Year Official Warranty'}</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-xs text-gray-400">
+                    <Radio size={18} className="text-orange-motorsport" />
+                    <span>{lang === 'id' ? 'Dukungan Firmware Free' : 'Free Firmware Updates'}</span>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#9ca3af' }}>
-                  <Radio size={16} color="#F7941D" />
-                  <span>Dukungan Firmware Free</span>
-                </div>
-              </div>
+              </MotionReveal>
             </div>
           </div>
 
           {/* Features Grid Section */}
-          <div style={{ marginBottom: '64px' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', marginBottom: '24px', fontFamily: 'var(--font-tech), sans-serif' }}>
-              {lang === 'id' ? 'Fitur Unggulan & Kapabilitas' : 'Key Features & Capabilities'}
-            </h2>
+          <div className="mb-20">
+            <MotionReveal>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white uppercase mb-8">
+                {lang === 'id' ? 'Fitur Unggulan & Kapabilitas' : 'Key Features & Capabilities'}
+              </h2>
+            </MotionReveal>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {product.features.map((feat, idx) => (
-                <div 
-                  key={idx}
-                  style={{
-                    background: 'rgba(26, 10, 46, 0.6)',
-                    border: '1px solid rgba(168, 85, 247, 0.2)',
-                    borderRadius: '16px',
-                    padding: '24px'
-                  }}
-                >
-                  <div style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(168, 85, 247, 0.15)',
-                    color: '#A855F7',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '16px'
-                  }}>
-                    {renderIcon(feat.iconName)}
+                <MotionReveal key={idx} delay={idx * 0.1}>
+                  <div className="h-full rounded-2xl bg-surface border border-white/10 p-6 hover:border-purple-electric/40 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-purple-electric/15 text-purple-electric flex items-center justify-center mb-4 border border-purple-electric/30">
+                      {renderIcon(feat.iconName)}
+                    </div>
+                    <h3 className="font-display text-lg font-bold text-white mb-2">
+                      {feat.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      {feat.description}
+                    </p>
                   </div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', marginBottom: '8px', fontFamily: 'var(--font-tech), sans-serif' }}>
-                    {feat.title}
-                  </h3>
-                  <p style={{ fontSize: '13px', color: '#9ca3af', lineHeight: '1.6' }}>
-                    {feat.description}
-                  </p>
-                </div>
+                </MotionReveal>
               ))}
             </div>
           </div>
 
-          {/* Specs & In-The-Box Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '40px', marginBottom: '64px' }}>
-            {/* Technical Specs Table */}
-            <div>
-              <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginBottom: '20px', fontFamily: 'var(--font-tech), sans-serif' }}>
-                {lang === 'id' ? 'Spesifikasi Detail' : 'Detailed Specifications'}
-              </h2>
-              <div style={{
-                background: 'rgba(26, 10, 46, 0.8)',
-                border: '1px solid rgba(168, 85, 247, 0.2)',
-                borderRadius: '16px',
-                overflow: 'hidden'
-              }}>
-                {product.specifications.map((item, idx) => (
-                  <div 
-                    key={idx}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      padding: '12px 20px',
-                      borderBottom: idx !== product.specifications.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                      backgroundColor: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)'
-                    }}
-                  >
-                    <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 500 }}>{item.label}</span>
-                    <span style={{ fontSize: '13px', color: '#e2d6f5', fontWeight: 600, textAlign: 'right' }}>{item.value}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Specifications Table & In The Box */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+            {/* Specs Table */}
+            <div className="lg:col-span-7">
+              <MotionReveal>
+                <h2 className="font-display text-2xl font-bold text-white uppercase mb-6">
+                  {lang === 'id' ? 'Spesifikasi Detail' : 'Detailed Specifications'}
+                </h2>
+                <div className="rounded-2xl bg-surface border border-white/10 overflow-hidden">
+                  {product.specifications.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      className={`flex justify-between items-center px-6 py-3.5 ${
+                        idx !== product.specifications.length - 1 ? 'border-b border-white/5' : ''
+                      } ${idx % 2 === 0 ? 'bg-transparent' : 'bg-white/1'}`}
+                    >
+                      <span className="text-xs text-gray-400 font-mono">{item.label}</span>
+                      <span className="text-xs text-gray-200 font-mono font-semibold text-right">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </MotionReveal>
             </div>
 
-            {/* What's In The Box */}
-            <div>
-              <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginBottom: '20px', fontFamily: 'var(--font-tech), sans-serif' }}>
-                {lang === 'id' ? 'Kelengkapan Paket (In The Box)' : 'What\'s Included'}
-              </h2>
-              <div style={{
-                background: 'rgba(26, 10, 46, 0.8)',
-                border: '1px solid rgba(168, 85, 247, 0.2)',
-                borderRadius: '16px',
-                padding: '24px'
-              }}>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* In The Box */}
+            <div className="lg:col-span-5">
+              <MotionReveal delay={0.2}>
+                <h2 className="font-display text-2xl font-bold text-white uppercase mb-6">
+                  {lang === 'id' ? 'Kelengkapan Paket (In The Box)' : 'What\'s Included (In The Box)'}
+                </h2>
+                <div className="rounded-2xl bg-surface border border-white/10 p-6 space-y-4">
                   {product.inTheBox.map((boxItem, idx) => (
-                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#e2d6f5' }}>
-                      <div style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(168, 85, 247, 0.15)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                      }}>
-                        <PackageCheck size={16} color="#A855F7" />
+                    <div key={idx} className="flex items-center space-x-3 text-xs text-gray-200">
+                      <div className="w-7 h-7 rounded-full bg-purple-electric/15 text-purple-electric flex items-center justify-center shrink-0 border border-purple-electric/30">
+                        <PackageCheck size={14} />
                       </div>
                       <span>{boxItem}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
-              </div>
+                </div>
+              </MotionReveal>
             </div>
           </div>
 
           {/* Related Products Switcher */}
-          <div style={{ borderTop: '1px solid rgba(168, 85, 247, 0.2)', paddingTop: '48px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#ffffff', marginBottom: '24px', textAlign: 'center', fontFamily: 'var(--font-tech), sans-serif' }}>
-              {lang === 'id' ? 'Lini Perangkat Keras Lainnya' : 'Other Hardware Lineup'}
-            </h2>
+          <div className="border-t border-white/10 pt-16">
+            <MotionReveal>
+              <h2 className="font-display text-2xl font-bold text-white uppercase mb-8 text-center">
+                {lang === 'id' ? 'Lini Perangkat Keras Lainnya' : 'Other Hardware Lineup'}
+              </h2>
+            </MotionReveal>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-              {otherProducts.map((other) => (
-                <div 
-                  key={other.slug}
-                  style={{
-                    background: 'rgba(26, 10, 46, 0.6)',
-                    border: '1px solid rgba(168, 85, 247, 0.2)',
-                    borderRadius: '16px',
-                    padding: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: '11px', color: '#F7941D', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      {other.badge}
-                    </span>
-                    <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', marginTop: '4px', marginBottom: '8px', fontFamily: 'var(--font-tech), sans-serif' }}>
-                      {other.name}
-                    </h3>
-                    <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '16px', lineHeight: '1.5' }}>
-                      {other.description}
-                    </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {otherProducts.map((other, idx) => (
+                <MotionReveal key={other.slug} delay={idx * 0.1}>
+                  <div className="rounded-2xl bg-surface border border-white/10 p-6 flex flex-col justify-between hover:border-purple-electric/40 transition-all duration-300">
+                    <div>
+                      <span className="text-[10px] font-mono text-orange-motorsport font-bold uppercase tracking-wider">
+                        {other.badge}
+                      </span>
+                      <h3 className="font-display text-xl font-bold text-white mt-1 mb-2">
+                        {other.name}
+                      </h3>
+                      <p className="text-xs text-gray-400 mb-6 leading-relaxed">
+                        {other.description}
+                      </p>
+                    </div>
+
+                    <Link 
+                      href={`/products/${other.slug}`}
+                      className="w-full py-3 rounded-xl border border-white/15 text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:bg-white hover:text-black transition-all duration-300"
+                    >
+                      <span>{lang === 'id' ? `Lihat ${other.name}` : `View ${other.name}`}</span>
+                      <ArrowRight size={14} />
+                    </Link>
                   </div>
-                  <Link 
-                    href={`/products/${other.slug}`}
-                    className="btn btn-outline-white"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      padding: '10px 16px',
-                      borderRadius: '8px',
-                      fontSize: '13px',
-                      fontWeight: 600
-                    }}
-                  >
-                    Lihat {other.name} <ArrowRight size={14} />
-                  </Link>
-                </div>
+                </MotionReveal>
               ))}
             </div>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="footer" style={{ borderTop: '1px solid rgba(168, 85, 247, 0.15)', background: '#0a0314' }}>
-        <div className="container">
-          <div className="footer-bottom">
-            <div>© 2023 SynchroTech Racing Systems. All rights reserved.</div>
-            <div className="footer-bottom-links">
-              <Link href="/">{lang === 'id' ? 'Beranda' : 'Home'}</Link>
-              <Link href="/#contact">{lang === 'id' ? 'Hubungi Kami' : 'Contact Us'}</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Unified Footer */}
+      <Footer 
+        lang={lang} 
+        onToggleLang={toggleLang} 
+        onTriggerComingSoon={triggerComingSoon} 
+      />
     </div>
   );
 }

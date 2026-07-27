@@ -8,8 +8,9 @@ import {
   LayoutDashboard, 
   Users, 
   Key, 
+  Package,
   LogOut,
-  Cpu
+  Download
 } from 'lucide-react';
 
 export default function AdminLayout({
@@ -24,10 +25,27 @@ export default function AdminLayout({
     return <>{children}</>;
   }
 
-  const navItems = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Customer Management', href: '/admin/customers', icon: Users },
-    { name: 'License Keys', href: '/admin/licenses', icon: Key },
+  const navGroups = [
+    {
+      title: 'RINGKASAN UTAMA',
+      items: [
+        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+      ]
+    },
+    {
+      title: 'KATALOG & STORE',
+      items: [
+        { name: 'Manajemen Produk', href: '/admin/products', icon: Package },
+      ]
+    },
+    {
+      title: 'SOFTWARE & LISENSI',
+      items: [
+        { name: 'Installer Software', href: '/admin/software', icon: Download },
+        { name: 'Manajemen Customer', href: '/admin/customers', icon: Users },
+        { name: 'License Keys', href: '/admin/licenses', icon: Key },
+      ]
+    }
   ];
 
   return (
@@ -37,29 +55,41 @@ export default function AdminLayout({
 
       {/* Sidebar */}
       <aside className="admin-sidebar">
-        <div className="sidebar-brand">
+        <div className="sidebar-brand flex items-center justify-between">
           <img 
             src="/logotype.png" 
             alt="SynchroTech" 
-            style={{ height: '28px', width: 'auto', objectFit: 'contain' }} 
+            style={{ height: '26px', width: 'auto', objectFit: 'contain' }} 
           />
+          <span className="text-[9px] font-mono font-bold bg-purple-electric/20 text-[#C084FC] border border-purple-electric/30 px-2 py-0.5 rounded-md uppercase">
+            ADMIN
+          </span>
         </div>
 
         <nav className="sidebar-nav">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link 
-                key={item.name} 
-                href={item.href}
-                className={`nav-link ${isActive ? 'active' : ''}`}
-              >
-                <Icon size={18} />
-                <span>{item.name}</span>
-              </Link>
-            );
-          })}
+          {navGroups.map((group, gIdx) => (
+            <div key={gIdx} className="mb-6">
+              <div className="text-[10px] font-mono font-bold text-purple-electric uppercase tracking-widest px-4 mb-2.5 opacity-90">
+                {group.title}
+              </div>
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link 
+                      key={item.name} 
+                      href={item.href}
+                      className={`nav-link ${isActive ? 'active' : ''}`}
+                    >
+                      <Icon size={18} />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         <div className="sidebar-footer">
@@ -89,8 +119,6 @@ export default function AdminLayout({
           {children}
         </div>
       </main>
-
-
     </div>
   );
 }

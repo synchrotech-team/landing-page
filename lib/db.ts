@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-// ponytail: Prisma Client singleton to prevent exhausting database connections in development / serverless environments
+// Standard Prisma Client singleton to prevent exhausting database connections in Next.js
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
@@ -8,7 +8,7 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
 
 if (process.env.NODE_ENV !== 'production') {

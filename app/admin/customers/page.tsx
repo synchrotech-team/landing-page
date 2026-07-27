@@ -216,7 +216,7 @@ export default function CustomerManagementPage() {
       {/* Modal Popup */}
       {modalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content modal-content-sm">
             <div className="modal-header">
               <h3>{editId ? 'Edit Customer' : 'Tambah Customer Baru'}</h3>
               <button className="close-btn" onClick={() => setModalOpen(false)}>

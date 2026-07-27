@@ -351,7 +351,7 @@ export default function LicenseManagementPage() {
       {/* Generate Modal */}
       {modalOpen && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content modal-content-sm">
             <div className="modal-header">
               <h3>Generate New License</h3>
               <button className="close-btn" onClick={() => setModalOpen(false)}>
