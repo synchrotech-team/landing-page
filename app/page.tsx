@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   Check, 
   Globe, 
@@ -200,6 +202,7 @@ const translations = {
 };
 
 export default function Page() {
+  const router = useRouter();
   // Lang state (defaults to Indonesian)
   const [lang, setLang] = useState<'en' | 'id'>('id');
 
@@ -232,12 +235,14 @@ export default function Page() {
     if (!contactName || !contactEmail || !contactMessage) return;
     setSubmitStatus('submitting');
     
-    // ponytail: simulate API request with simple timeout, upgrade to real endpoint when ready
     setTimeout(() => {
-      setSubmitStatus('success');
-      // ponytail: open Gmail compose tab in browser
-      window.open(getGmailUrl(), '_blank');
-    }, 1200);
+      const params = new URLSearchParams({
+        name: contactName,
+        email: contactEmail,
+        message: contactMessage
+      });
+      router.push(`/thank-you?${params.toString()}`);
+    }, 600);
   };
 
   const handleResetForm = () => {
@@ -321,7 +326,7 @@ export default function Page() {
           </a>
           <nav aria-label="Main Navigation">
             <ul className="nav-menu">
-              <li><a href="#products">{t('products')}</a></li>
+              <li><Link href="/products">{t('products')}</Link></li>
               <li><a href="#solutions" onClick={(e) => triggerComingSoon(e, t('solutions'))}>{t('solutions')}</a></li>
               <li><a href="#support" onClick={(e) => triggerComingSoon(e, t('support'))}>{t('support')}</a></li>
               <li><a href="#community" onClick={(e) => triggerComingSoon(e, t('community'))}>{t('community')}</a></li>
@@ -378,9 +383,12 @@ export default function Page() {
             {/* Card 1: Joulemeter */}
             <article className="card">
               <span className="card-badge badge-dark">{t('energySpecialist')}</span>
-              <div className="card-media media-placeholder">
-                <div className="coming-soon">Coming Soon</div>
-                <div className="sub-text">Product photo in production</div>
+              <div className="card-media" style={{ overflow: 'hidden', borderRadius: '12px', background: '#0a0314', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img 
+                  src="/products/joulemeter.png" 
+                  alt="SynchroTech Joulemeter" 
+                  style={{ width: '100%', height: '180px', objectFit: 'cover', transition: 'transform 0.3s ease' }} 
+                />
               </div>
               <h3>Joulemeter</h3>
               <p className="card-subtitle">{t('joulemeterSubtitle')}</p>
@@ -389,15 +397,18 @@ export default function Page() {
                  <li><Check /> Manganin Shunt 50A (0.1%)</li>
                 <li><Check /> Isolated CAN + WiFi/BLE</li>
               </ul>
-              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, `Joulemeter - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
+              <Link href="/products/joulemeter" className="btn btn-outline-dark">{t('learnMore')} <ArrowRightIcon /></Link>
             </article>
 
             {/* Card 2: Nexus One (Highlighted / Popular) */}
             <article className="card highlighted">
               <span className="card-badge badge-blue">{t('mostPopular')}</span>
-              <div className="card-media media-placeholder">
-                <div className="coming-soon">Coming Soon</div>
-                <div className="sub-text">Product photo in production</div>
+              <div className="card-media" style={{ overflow: 'hidden', borderRadius: '12px', background: '#0a0314', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img 
+                  src="/products/nexus-one.png" 
+                  alt="SynchroTech Nexus One" 
+                  style={{ width: '100%', height: '180px', objectFit: 'cover', transition: 'transform 0.3s ease' }} 
+                />
               </div>
               <h3>Nexus One</h3>
               <p className="card-subtitle blue">{t('nexusSubtitle')}</p>
@@ -407,7 +418,7 @@ export default function Page() {
                 <li><Check /> Standalone Li-Po 2000mAh</li>
                 <li><Check /> Auto-Charging via M12 IP67</li>
               </ul>
-              <button className="btn btn-secondary" onClick={(e) => triggerComingSoon(e, `Nexus One - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
+              <Link href="/products/nexus-one" className="btn btn-secondary">{t('learnMore')} <ArrowRightIcon /></Link>
             </article>
 
             {/* Card 3: Display (Feature rich, live dynamic mockup) */}
@@ -449,7 +460,7 @@ export default function Page() {
                 <li className="purple-icon"><Check /> Auto Day/Night Theme via ALS</li>
                 <li className="purple-icon"><Check /> Cross-Venue Auto-Scaling</li>
               </ul>
-              <button className="btn btn-outline-dark" onClick={(e) => triggerComingSoon(e, `Display - ${t('learnMore')}`)}>{t('learnMore')} <ArrowRightIcon /></button>
+              <Link href="/products/display" className="btn btn-outline-dark">{t('learnMore')} <ArrowRightIcon /></Link>
             </article>
           </div>
         </div>
@@ -760,9 +771,9 @@ export default function Page() {
             <div className="footer-column">
               <h3>{t('products')}</h3>
               <ul className="footer-links">
-                <li><a href="#joulemeter" onClick={(e) => triggerComingSoon(e, `${t('products')} - Joulemeter`)}>Joulemeter</a></li>
-                <li><a href="#nexus-one" onClick={(e) => triggerComingSoon(e, `${t('products')} - Nexus One`)}>Nexus One</a></li>
-                <li><a href="#display" onClick={(e) => triggerComingSoon(e, `${t('products')} - Display`)}>Display</a></li>
+                <li><Link href="/products/joulemeter">Joulemeter</Link></li>
+                <li><Link href="/products/nexus-one">Nexus One</Link></li>
+                <li><Link href="/products/display">Display</Link></li>
                 <li><a href="#hub-cables" onClick={(e) => triggerComingSoon(e, `${t('products')} - Nexus Hub & Cables`)}>Nexus Hub & Cables</a></li>
               </ul>
             </div>

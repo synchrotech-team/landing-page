@@ -12,6 +12,12 @@ The current landing page (`app/page.tsx`, ~905 lines, single file) is a light-th
 
 **Already installed:** framer-motion v12, lucide-react, Next 16 App Router, React 19.
 
+## Tooling & Resources
+
+- **21st.dev (MCP)** — source of premium component inspiration/reference: use `mcp__21st__search` / `mcp__21st__get_component` to find component patterns (hero, spotlight card, bento grid, animated counter, navbar blur) as reference, then adapt them to SynchroTech brand tokens — no raw copy-paste.
+- **UI-UX-PRO-MAX skill** — required during design/implementation: `ui-ux-pro-max` (style, palette, font pairing, UX guidelines for Next.js + Tailwind + shadcn/ui) and `ui-ux-pro-max:ui-styling` (shadcn/ui + Tailwind patterns, dark mode, accessibility).
+- **Framer Motion v12** (already installed) — all micro-interactions: stagger/blur reveal (`whileInView`), navbar shrink (`useScroll`), animated counters (`useSpring` + `useInView`), spring `whileHover`/`whileTap`, parallax. All behind a `useReducedMotion` guard, transform/opacity only.
+
 ## Approach
 
 ### 1. Install & configure stack
