@@ -221,7 +221,7 @@ export default function AdminSoftwarePage() {
             <Link
               href="/downloads"
               target="_blank"
-              className="action-btn bg-white/10 hover:bg-white/20 text-white"
+              className="action-btn bg-foreground/10 hover:bg-foreground/20 text-foreground"
             >
               <ExternalLink size={16} />
               <span>Lihat Halaman Downloads Publik</span>
@@ -232,10 +232,10 @@ export default function AdminSoftwarePage() {
 
       {/* Active Release Status Card */}
       {activeRelease && (
-        <div className="dash-card bg-linear-to-r from-surface via-[#130E26] to-surface border border-purple-electric/40 shadow-[0_0_50px_rgba(168,85,247,0.2)] relative overflow-hidden">
+        <div className="dash-card border border-purple-electric/40 relative overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-6 relative z-10">
             <div className="flex items-center space-x-5">
-              <div className="w-16 h-16 rounded-2xl bg-purple-electric/20 border border-purple-electric/40 flex items-center justify-center text-[#C084FC] shadow-[0_0_25px_rgba(168,85,247,0.3)]">
+              <div className="w-16 h-16 bg-purple-electric/20 border border-purple-electric/40 flex items-center justify-center text-purple-electric">
                 <FileCheck size={32} />
               </div>
               <div>
@@ -247,11 +247,11 @@ export default function AdminSoftwarePage() {
                     {activeRelease.version}
                   </span>
                 </div>
-                <h3 className="font-display text-xl font-bold text-white">
+                <h3 className="font-display text-xl font-bold text-foreground">
                   {activeRelease.title || activeRelease.fileName}
                 </h3>
-                <p className="text-xs font-mono text-gray-400 mt-1">
-                  File: <span className="text-white font-bold">{activeRelease.fileName}</span> • Ukuran: <span className="text-white font-bold">{activeRelease.fileSize || 'N/A'}</span> • Total Unduhan: <span className="text-emerald-400 font-bold">{activeRelease.downloadCount}x</span>
+                <p className="text-xs font-mono text-muted-foreground mt-1">
+                  File: <span className="text-foreground font-bold">{activeRelease.fileName}</span> • Ukuran: <span className="text-foreground font-bold">{activeRelease.fileSize || 'N/A'}</span> • Total Unduhan: <span className="text-emerald-400 font-bold">{activeRelease.downloadCount}x</span>
                 </p>
               </div>
             </div>
@@ -261,7 +261,7 @@ export default function AdminSoftwarePage() {
                 href={`/api/download/software?action=download&id=${activeRelease.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold uppercase transition-all flex items-center space-x-2 border border-white/15"
+                className="px-5 py-3 rounded-xl bg-foreground/10 hover:bg-foreground/20 text-foreground font-mono text-xs font-bold uppercase transition-all flex items-center space-x-2 border border-foreground/15"
               >
                 <Download size={14} />
                 <span>Test Unduh Installer (.exe)</span>
@@ -275,12 +275,12 @@ export default function AdminSoftwarePage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Form: Upload & Version Metadata (7 Cols) */}
         <form onSubmit={handleSaveRelease} className="lg:col-span-7 dash-card space-y-6">
-          <div className="border-b border-white/10 pb-4">
-            <h3 className="font-display text-lg font-bold text-white uppercase flex items-center space-x-2">
+          <div className="border-b border-foreground/10 pb-4">
+            <h3 className="font-display text-lg font-bold text-foreground uppercase flex items-center space-x-2">
               <Upload size={18} className="text-purple-electric" />
               <span>Upload & Publikasikan Software Baru</span>
             </h3>
-            <p className="text-xs font-mono text-gray-400">
+            <p className="text-xs font-mono text-muted-foreground">
               Upload file .exe / .msi / .zip langsung ke Vercel Blob Cloud Storage
             </p>
           </div>
@@ -300,14 +300,14 @@ export default function AdminSoftwarePage() {
           )}
 
           {/* Upload Drop Zone Box */}
-          <div className="rounded-2xl bg-black/60 border border-dashed border-purple-electric/50 p-6 text-center space-y-4 hover:border-purple-electric transition-all">
-            <div className="w-14 h-14 rounded-2xl bg-purple-electric/10 border border-purple-electric/30 flex items-center justify-center text-[#C084FC] mx-auto">
+          <div className="rounded-2xl bg-surface border border-dashed border-purple-electric/50 p-6 text-center space-y-4 hover:border-purple-electric transition-all">
+            <div className="w-14 h-14 bg-purple-electric/10 border border-purple-electric/30 flex items-center justify-center text-purple-electric mx-auto">
               <HardDrive size={28} />
             </div>
 
             <div>
-              <h4 className="font-bold text-white text-sm">Pilih File Installer (.exe, .msi, .zip)</h4>
-              <p className="text-xs font-mono text-gray-400 mt-1">
+              <h4 className="font-bold text-foreground text-sm">Pilih File Installer (.exe, .msi, .zip)</h4>
+              <p className="text-xs font-mono text-muted-foreground mt-1">
                 Mendukung file aplikasi hingga ukuran besar (Vercel Blob Cloud Storage)
               </p>
             </div>
@@ -324,7 +324,7 @@ export default function AdminSoftwarePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="px-6 py-3.5 rounded-xl bg-linear-to-r from-purple-electric to-[#9333EA] text-white text-xs font-mono font-bold uppercase tracking-wider inline-flex items-center space-x-2 hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all cursor-pointer disabled:opacity-50"
+              className="px-6 py-3.5 bg-purple-electric text-white text-xs font-mono font-bold uppercase tracking-wider inline-flex items-center space-x-2 hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
             >
               {uploading ? (
                 <>
@@ -343,14 +343,14 @@ export default function AdminSoftwarePage() {
           {/* Form Metadata Fields */}
           <div className="grid grid-cols-2 gap-5 pt-2">
             <div className="form-group space-y-2">
-              <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Judul Perangkat Lunak (ID)</label>
+              <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Judul Perangkat Lunak (ID)</label>
               <input 
                 type="text" 
                 required
                 placeholder="mis. SynchroTech Race Telemetry Suite" 
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
 
@@ -361,56 +361,56 @@ export default function AdminSoftwarePage() {
                 placeholder="mis. SynchroTech Race Telemetry Suite" 
                 value={titleEn}
                 onChange={(e) => setTitleEn(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div className="form-group space-y-2">
-              <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Versi Software *</label>
+              <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Versi Software *</label>
               <input 
                 type="text" 
                 required
                 placeholder="mis. v1.2.0" 
                 value={version}
                 onChange={(e) => setVersion(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
 
             <div className="form-group space-y-2">
-              <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Sistem Operasi</label>
+              <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Sistem Operasi</label>
               <input 
                 type="text" 
                 placeholder="mis. Windows 10/11 (64-bit)" 
                 value={osRequirements}
                 onChange={(e) => setOsRequirements(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
 
             <div className="form-group space-y-2">
-              <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Ukuran File</label>
+              <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Ukuran File</label>
               <input 
                 type="text" 
                 placeholder="mis. 45.2 MB" 
                 value={fileSize}
                 onChange={(e) => setFileSize(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
           </div>
 
           <div className="form-group space-y-2">
-            <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Nama File Software (.exe) *</label>
+            <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Nama File Software (.exe) *</label>
             <input 
               type="text" 
               required
               placeholder="mis. SynchroTech_Telemetry_Setup_v1.2.0.exe" 
               value={fileName}
               onChange={(e) => setFileName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+              className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
             />
           </div>
 
@@ -422,19 +422,19 @@ export default function AdminSoftwarePage() {
               placeholder="https://...public.blob.vercel-storage.com/... / /downloads/..." 
               value={fileUrl}
               onChange={(e) => setFileUrl(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-xs font-mono focus:border-purple-electric"
+              className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-xs font-mono focus:border-purple-electric"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-5">
             <div className="form-group space-y-2">
-              <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Catatan Rilis Build (ID)</label>
+              <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Catatan Rilis Build (ID)</label>
               <textarea 
                 rows={4}
                 placeholder="Tuliskan fitur baru, perbaikan bug, atau catatan rilis..." 
                 value={releaseNotes}
                 onChange={(e) => setReleaseNotes(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
 
@@ -445,7 +445,7 @@ export default function AdminSoftwarePage() {
                 placeholder="Write release notes and new features in English..." 
                 value={releaseNotesEn}
                 onChange={(e) => setReleaseNotesEn(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
               />
             </div>
           </div>
@@ -453,7 +453,7 @@ export default function AdminSoftwarePage() {
           <button
             type="submit"
             disabled={submitting || !fileUrl}
-            className="w-full py-4 rounded-xl bg-linear-to-r from-purple-electric to-[#9333EA] text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:shadow-[0_0_35px_rgba(168,85,247,0.5)] transition-all cursor-pointer disabled:opacity-50"
+            className="w-full py-4 bg-purple-electric text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
           >
             {submitting ? (
               <>
@@ -471,12 +471,12 @@ export default function AdminSoftwarePage() {
 
         {/* Right Panel: History Releases Table (5 Cols) */}
         <div className="lg:col-span-5 dash-card space-y-6">
-          <div className="border-b border-white/10 pb-4">
-            <h3 className="font-display text-lg font-bold text-white uppercase flex items-center space-x-2">
+          <div className="border-b border-foreground/10 pb-4">
+            <h3 className="font-display text-lg font-bold text-foreground uppercase flex items-center space-x-2">
               <Calendar size={18} className="text-purple-electric" />
               <span>Daftar Build Software</span>
             </h3>
-            <p className="text-xs font-mono text-gray-400">
+            <p className="text-xs font-mono text-muted-foreground">
               Riwayat versi installer yang tampil di halaman `/downloads`
             </p>
           </div>
@@ -495,12 +495,12 @@ export default function AdminSoftwarePage() {
                   key={rel.id} 
                   className={`p-4 rounded-2xl border transition-all ${
                     rel.isActive 
-                      ? 'bg-purple-electric/10 border-purple-electric/40 shadow-[0_0_20px_rgba(168,85,247,0.15)]' 
-                      : 'bg-black/40 border-white/10 hover:border-white/20'
+                      ? 'bg-purple-electric/10 border-purple-electric/40'
+                      : 'bg-surface border-foreground/10 hover:border-foreground/20'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs font-bold text-white bg-white/10 px-2.5 py-0.5 rounded-md">
+                    <span className="font-mono text-xs font-bold text-foreground bg-foreground/10 px-2.5 py-0.5 rounded-md">
                       {rel.version}
                     </span>
                     {rel.isActive ? (
@@ -517,15 +517,15 @@ export default function AdminSoftwarePage() {
                     )}
                   </div>
 
-                  <div className="font-bold text-sm text-white truncate mb-1">
+                  <div className="font-bold text-sm text-foreground truncate mb-1">
                     {rel.title || rel.fileName}
                   </div>
 
-                  <div className="text-[11px] font-mono text-gray-400 mb-3">
+                  <div className="text-[11px] font-mono text-muted-foreground mb-3">
                     {rel.fileName} • {rel.fileSize || 'N/A'} • Unduhan: {rel.downloadCount}x
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <div className="flex items-center justify-between pt-2 border-t border-foreground/10">
                     <a
                       href={`/api/download/software?action=download&id=${rel.id}`}
                       target="_blank"

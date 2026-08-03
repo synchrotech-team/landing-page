@@ -45,7 +45,7 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-purple-electric selection:text-white">
+    <div className="min-h-screen bg-background text-foreground selection:bg-purple-electric selection:text-white">
       {/* Navigation Header */}
       <Navbar 
         lang={lang} 

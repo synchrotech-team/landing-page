@@ -354,7 +354,7 @@ export default function AdminProductsPage() {
                 {filteredProducts.map((prod) => (
                   <tr key={prod.id}>
                     <td>
-                      <div className="w-12 h-12 rounded-lg bg-black border border-white/10 overflow-hidden flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-lg bg-surface border border-foreground/10 overflow-hidden flex items-center justify-center">
                         <img 
                           src={prod.image} 
                           alt={prod.name} 
@@ -363,14 +363,14 @@ export default function AdminProductsPage() {
                       </div>
                     </td>
                     <td>
-                      <div className="font-bold text-white text-sm">{prod.name}</div>
+                      <div className="font-bold text-foreground text-sm">{prod.name}</div>
                       <div className="font-mono text-xs text-purple-electric">/products/{prod.slug}</div>
                     </td>
                     <td>
-                      <span className="font-mono text-xs text-gray-300">{prod.category}</span>
+                      <span className="font-mono text-xs text-muted-foreground">{prod.category}</span>
                     </td>
                     <td>
-                      <span className="font-mono font-bold text-white">{prod.price}</span>
+                      <span className="font-mono font-bold text-foreground">{prod.price}</span>
                     </td>
                     <td>
                       <span className="badge badge-active">{prod.stockStatus}</span>
@@ -429,7 +429,7 @@ export default function AdminProductsPage() {
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setViewMode('table')}
-            className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/15 text-white transition-colors cursor-pointer flex items-center space-x-2"
+            className="p-2.5 rounded-xl bg-foreground/5 border border-foreground/10 hover:bg-foreground/15 text-foreground transition-colors cursor-pointer flex items-center space-x-2"
           >
             <ArrowLeft size={16} />
             <span className="text-xs font-mono font-bold">Kembali ke Daftar</span>
@@ -439,21 +439,21 @@ export default function AdminProductsPage() {
             <span className="font-mono text-[10px] text-purple-electric font-bold tracking-widest uppercase block mb-1">
               {editingId ? `ID PRODUK: #${editingId}` : 'FORM PRODUK BARU'}
             </span>
-            <h1 className="font-display text-2xl font-extrabold text-white uppercase tracking-tight">
+            <h1 className="font-display text-2xl font-extrabold text-foreground uppercase tracking-tight">
               {editingId ? `Edit Produk: ${name}` : 'Tambah Produk Telemetri Baru'}
             </h1>
           </div>
         </div>
 
         {/* Tab Navigation Switches */}
-        <div className="flex items-center space-x-2 bg-black/60 border border-white/10 p-1.5 rounded-xl">
+        <div className="flex items-center space-x-2 bg-surface border border-foreground/10 p-1.5 rounded-xl">
           <button
             type="button"
             onClick={() => setActiveTab('main')}
             className={`px-4 py-2.5 rounded-lg text-xs font-mono font-bold uppercase transition-all duration-300 flex items-center space-x-2 cursor-pointer ${
               activeTab === 'main' 
-                ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-purple-electric text-white'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <Package size={14} />
@@ -465,8 +465,8 @@ export default function AdminProductsPage() {
             onClick={() => setActiveTab('content')}
             className={`px-4 py-2.5 rounded-lg text-xs font-mono font-bold uppercase transition-all duration-300 flex items-center space-x-2 cursor-pointer ${
               activeTab === 'content' 
-                ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-purple-electric text-white'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <FileText size={14} />
@@ -478,8 +478,8 @@ export default function AdminProductsPage() {
             onClick={() => setActiveTab('specs')}
             className={`px-4 py-2.5 rounded-lg text-xs font-mono font-bold uppercase transition-all duration-300 flex items-center space-x-2 cursor-pointer ${
               activeTab === 'specs' 
-                ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-purple-electric text-white'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <Sliders size={14} />
@@ -503,51 +503,51 @@ export default function AdminProductsPage() {
             <div className="lg:col-span-7 space-y-6">
               <div className="grid grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Nama Produk *</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Nama Produk *</label>
                   <input 
                     type="text" 
                     required 
                     placeholder="mis. Nexus Two 4G" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
 
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Slug URL</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Slug URL</label>
                   <input 
                     type="text" 
                     placeholder="mis. nexus-two (otomatis dari nama)" 
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Kategori Hardware *</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Kategori Hardware *</label>
                   <input 
                     type="text" 
                     required 
                     placeholder="mis. Master Telemetry Hub" 
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
 
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Harga Resmi (IDR) *</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Harga Resmi (IDR) *</label>
                   <input 
                     type="text" 
                     required 
                     placeholder="mis. Rp 6.499.000" 
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
               </div>
@@ -555,55 +555,55 @@ export default function AdminProductsPage() {
               {/* Stock Status & Badges */}
               <div className="grid grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Status Stok (ID)</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Status Stok (ID)</label>
                   <input 
                     type="text" 
                     value={stockStatus}
                     onChange={(e) => setStockStatus(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
 
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Status Stok (EN)</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Status Stok (EN)</label>
                   <input 
                     type="text" 
                     value={stockStatusEn}
                     onChange={(e) => setStockStatusEn(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Badge Text (ID)</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Badge Text (ID)</label>
                   <input 
                     type="text" 
                     value={badge}
                     onChange={(e) => setBadge(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
 
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Badge Text (EN)</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Badge Text (EN)</label>
                   <input 
                     type="text" 
                     value={badgeEn}
                     onChange={(e) => setBadgeEn(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   />
                 </div>
 
                 <div className="form-group space-y-2">
-                  <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Warna Badge</label>
+                  <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Warna Badge</label>
                   <select 
                     value={badgeType}
                     onChange={(e) => setBadgeType(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                    className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                   >
-                    <option value="purple">Ungu (#A855F7)</option>
+                    <option value="purple">Ungu (#A149FA)</option>
                     <option value="blue">Biru (#3B82F6)</option>
                     <option value="dark">Gelap (Neutral)</option>
                   </select>
@@ -611,11 +611,11 @@ export default function AdminProductsPage() {
               </div>
 
               <div className="form-group space-y-2">
-                <label className="text-xs font-mono font-bold text-gray-300 uppercase block">Tipe Simulasi Dashboard Mockup</label>
+                <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Tipe Simulasi Dashboard Mockup</label>
                 <select 
                   value={mockupType}
                   onChange={(e) => setMockupType(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 >
                   <option value="joulemeter">Joulemeter Power Sim (24-bit Current/Voltage)</option>
                   <option value="nexus">Nexus 4G LTE Sim (Global Cellular + GNSS)</option>
@@ -627,23 +627,23 @@ export default function AdminProductsPage() {
             {/* Right 5 Columns: Upload Gambar & Live Card Preview */}
             <div className="lg:col-span-5 space-y-6">
               {/* Upload Box */}
-              <div className="rounded-2xl bg-black/50 border border-white/10 p-6 space-y-4">
+              <div className="rounded-2xl bg-surface border border-foreground/10 p-6 space-y-4">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase flex items-center space-x-2">
                   <ImageIcon size={16} />
                   <span>Upload & Kelola Gambar Perangkat</span>
                 </label>
 
-                <div className="w-full h-52 rounded-2xl bg-black border border-white/10 overflow-hidden flex items-center justify-center relative group">
+                <div className="w-full h-52 rounded-2xl bg-surface border border-foreground/10 overflow-hidden flex items-center justify-center relative group">
                   <img src={image} alt="Preview" className="w-full h-full object-cover" />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[11px] font-mono text-gray-400">URL Gambar Publik:</label>
+                  <label className="text-[11px] font-mono text-muted-foreground">URL Gambar Publik:</label>
                   <input 
                     type="text" 
                     value={image} 
                     onChange={(e) => setImage(e.target.value)} 
-                    className="w-full px-4 py-2.5 rounded-xl bg-black border border-white/10 text-white text-xs font-mono"
+                    className="w-full px-4 py-2.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-xs font-mono"
                   />
                 </div>
 
@@ -659,7 +659,7 @@ export default function AdminProductsPage() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="w-full py-4 rounded-xl bg-linear-to-r from-purple-electric to-[#9333EA] text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 bg-purple-electric text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
                 >
                   {uploadingImage ? (
                     <>
@@ -676,22 +676,22 @@ export default function AdminProductsPage() {
               </div>
 
               {/* Live Preview Card */}
-              <div className="rounded-2xl bg-white/2 border border-purple-electric/30 p-6 backdrop-blur-xl space-y-3">
-                <span className="font-mono text-[10px] text-gray-400 font-bold uppercase tracking-wider block">
+              <div className="bg-foreground/2 border border-purple-electric/30 p-6 space-y-3">
+                <span className="font-mono text-[10px] text-muted-foreground font-bold uppercase tracking-wider block">
                   👁️ Live Card Preview di /products:
                 </span>
-                <div className="rounded-xl bg-surface border border-white/10 p-5 space-y-3">
+                <div className="rounded-xl bg-surface border border-foreground/10 p-5 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-purple-electric/20 text-[#C084FC] border border-purple-electric/30">
+                    <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase bg-purple-electric/20 text-purple-electric border border-purple-electric/30">
                       {badge || 'Paling Populer'}
                     </span>
                     <span className="text-[10px] text-emerald-400 font-mono font-bold">
                       ● {stockStatus || 'Ready Stock'}
                     </span>
                   </div>
-                  <h4 className="font-display text-xl font-bold text-white">{name || 'Nama Produk'}</h4>
+                  <h4 className="font-display text-xl font-bold text-foreground">{name || 'Nama Produk'}</h4>
                   <p className="text-xs font-mono text-purple-electric">{subtitle || 'Subtitle Produk'}</p>
-                  <div className="font-mono text-lg font-bold text-white pt-2 border-t border-white/10">
+                  <div className="font-mono text-lg font-bold text-foreground pt-2 border-t border-foreground/10">
                     {price || 'Rp 0'}
                   </div>
                 </div>
@@ -714,7 +714,7 @@ export default function AdminProductsPage() {
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
                   placeholder="mis. Pusat Komando Telemetri 4G LTE"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
 
@@ -728,7 +728,7 @@ export default function AdminProductsPage() {
                   value={subtitleEn}
                   onChange={(e) => setSubtitleEn(e.target.value)}
                   placeholder="e.g. Master 4G LTE Telemetry Hub"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
             </div>
@@ -743,7 +743,7 @@ export default function AdminProductsPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Tuliskan 1-2 kalimat ringkasan produk untuk kartu katalog..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
 
@@ -756,7 +756,7 @@ export default function AdminProductsPage() {
                   value={descriptionEn}
                   onChange={(e) => setDescriptionEn(e.target.value)}
                   placeholder="Write 1-2 sentence catalog summary in English..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
             </div>
@@ -771,7 +771,7 @@ export default function AdminProductsPage() {
                   value={longDescription}
                   onChange={(e) => setLongDescription(e.target.value)}
                   placeholder="Tuliskan penjelasan teknis lengkap mengenai kapabilitas produk..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
 
@@ -784,7 +784,7 @@ export default function AdminProductsPage() {
                   value={longDescriptionEn}
                   onChange={(e) => setLongDescriptionEn(e.target.value)}
                   placeholder="Write full technical explanation in English..."
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
                 />
               </div>
             </div>
@@ -804,7 +804,7 @@ export default function AdminProductsPage() {
                   value={keySpecsText}
                   onChange={(e) => setKeySpecsText(e.target.value)}
                   placeholder="ADS1256 24-bit Delta-Sigma ADC&#10;Isolasi CAN Bus 2.5kV RMS&#10;Streaming 4G LTE Multi-Band"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm font-mono focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm font-mono focus:border-purple-electric"
                 />
               </div>
 
@@ -817,7 +817,7 @@ export default function AdminProductsPage() {
                   value={keySpecsTextEn}
                   onChange={(e) => setKeySpecsTextEn(e.target.value)}
                   placeholder="ADS1256 24-bit Delta-Sigma ADC&#10;2.5kV RMS Isolated CAN Bus&#10;4G LTE Multi-Band Live Streaming"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm font-mono focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm font-mono focus:border-purple-electric"
                 />
               </div>
             </div>
@@ -832,7 +832,7 @@ export default function AdminProductsPage() {
                   value={inTheBoxText}
                   onChange={(e) => setInTheBoxText(e.target.value)}
                   placeholder="1x Modul Hardware SynchroTech&#10;1x Kabel Harness M12 Waterproof (2m)&#10;1x Buku Panduan & Kartu Garansi Official"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm font-mono focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm font-mono focus:border-purple-electric"
                 />
               </div>
 
@@ -845,7 +845,7 @@ export default function AdminProductsPage() {
                   value={inTheBoxTextEn}
                   onChange={(e) => setInTheBoxTextEn(e.target.value)}
                   placeholder="1x SynchroTech Hardware Module&#10;1x M12 Waterproof Wiring Harness (2m)&#10;1x User Manual & Official Warranty Card"
-                  className="w-full px-4 py-3.5 rounded-xl bg-black/60 border border-white/10 text-white text-sm font-mono focus:border-purple-electric"
+                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm font-mono focus:border-purple-electric"
                 />
               </div>
             </div>
@@ -853,8 +853,8 @@ export default function AdminProductsPage() {
         )}
 
         {/* Footer Action Buttons */}
-        <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-          <div className="text-xs font-mono text-gray-400">
+        <div className="pt-6 border-t border-foreground/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="text-xs font-mono text-muted-foreground">
             Langkah {activeTab === 'main' ? '1/3' : activeTab === 'content' ? '2/3' : '3/3'}: <span className="text-purple-electric font-bold uppercase">{activeTab}</span>
           </div>
 
@@ -862,14 +862,14 @@ export default function AdminProductsPage() {
             <button
               type="button"
               onClick={() => setViewMode('table')}
-              className="px-6 py-3.5 rounded-xl bg-white/5 border border-white/15 text-white font-mono text-xs font-bold uppercase hover:bg-white/10 transition-colors"
+              className="px-6 py-3.5 rounded-xl bg-foreground/5 border border-foreground/15 text-foreground font-mono text-xs font-bold uppercase hover:bg-foreground/10 transition-colors"
             >
               Batal & Kembali
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-10 py-3.5 rounded-xl bg-linear-to-r from-purple-electric to-[#9333EA] text-white font-display text-xs font-bold uppercase tracking-wider flex items-center space-x-2 hover:shadow-[0_0_35px_rgba(168,85,247,0.5)] transition-all cursor-pointer disabled:opacity-50"
+              className="px-10 py-3.5 bg-purple-electric text-white font-display text-xs font-bold uppercase tracking-wider flex items-center space-x-2 hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
             >
               {submitting ? (
                 <>

@@ -41,11 +41,6 @@ export default function AdminLoginPage() {
 
   return (
     <div className="login-page-container">
-      {/* Background elements */}
-      <div className="grid-bg"></div>
-      <div className="glow-orb glow-1"></div>
-      <div className="glow-orb glow-2"></div>
-
       <div className="login-card">
         <div className="login-logo">
           <img 
@@ -92,10 +87,10 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+          <button type="submit" className="action-btn action-btn-primary w-full" style={{ justifyContent: 'center' }} disabled={loading}>
             {loading ? (
               <>
-                <RefreshCw size={14} className="spinner" /> Memproses...
+                <RefreshCw size={14} className="animate-spin" /> Memproses...
               </>
             ) : (
               'Masuk Ke Dashboard'

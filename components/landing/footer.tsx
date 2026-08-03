@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { MapPin, Phone, Mail, Globe } from 'lucide-react';
 import { Language, t } from '@/lib/i18n';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface FooterProps {
   lang: Language;
@@ -12,34 +13,34 @@ interface FooterProps {
 
 export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps) {
   return (
-    <footer className="bg-[#040407] border-t border-white/10 text-gray-400 py-16">
+    <footer className="bg-surface border-t border-foreground/10 text-muted-foreground py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-16">
           {/* Brand Col */}
           <div className="md:col-span-5 space-y-4">
-            <h2 className="font-display text-2xl font-black text-white tracking-widest uppercase">
+            <h2 className="font-display text-2xl font-black text-foreground tracking-widest uppercase">
               SYNCHROTECH
             </h2>
-            <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
+            <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
               {t('footerDesc', lang)}
             </p>
 
-            <div className="space-y-2.5 pt-4 border-t border-white/10 text-xs">
+            <div className="space-y-2.5 pt-4 border-t border-foreground/10 text-xs">
               <div className="flex items-start space-x-2">
-                <MapPin size={14} className="text-[#A855F7] flex-shrink-0 mt-0.5" />
-                <span className="text-gray-400">
+                <MapPin size={14} className="text-purple-electric flex-shrink-0 mt-0.5" />
+                <span className="text-muted-foreground">
                   Jl. St., Karanggeringging, Sumpiuh, Kec. Sumpiuh, Kabupaten Banyumas, Jawa Tengah 53195, Indonesia
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <Phone size={14} className="text-[#A855F7] flex-shrink-0" />
-                <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" className="hover:text-white underline font-mono">
+                <Phone size={14} className="text-purple-electric flex-shrink-0" />
+                <a href="https://wa.me/628132595764" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline font-mono">
                   +62 813-2595-764
                 </a>
               </div>
               <div className="flex items-center space-x-2">
-                <Mail size={14} className="text-[#A855F7] flex-shrink-0" />
-                <a href="mailto:synchrotechrace@gmail.com" className="hover:text-white underline font-mono">
+                <Mail size={14} className="text-purple-electric flex-shrink-0" />
+                <a href="mailto:synchrotechrace@gmail.com" className="hover:text-foreground underline font-mono">
                   synchrotechrace@gmail.com
                 </a>
               </div>
@@ -48,35 +49,35 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
 
           {/* Column 1: Products */}
           <div className="md:col-span-2 space-y-3">
-            <h3 className="font-mono text-xs text-white font-bold uppercase tracking-wider">
+            <h3 className="font-mono text-xs text-foreground font-bold uppercase tracking-wider">
               {t('products', lang)}
             </h3>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/products/joulemeter" className="hover:text-white transition-colors">Joulemeter</Link></li>
-              <li><Link href="/products/nexus-one" className="hover:text-white transition-colors">Nexus One</Link></li>
-              <li><Link href="/products/display" className="hover:text-white transition-colors">Display</Link></li>
-              <li><Link href="/products" className="hover:text-[#A855F7] transition-colors">{t('products', lang)} Catalog</Link></li>
+              <li><Link href="/products/joulemeter" className="hover:text-foreground transition-colors">Joulemeter</Link></li>
+              <li><Link href="/products/nexus-one" className="hover:text-foreground transition-colors">Nexus One</Link></li>
+              <li><Link href="/products/display" className="hover:text-foreground transition-colors">Display</Link></li>
+              <li><Link href="/products" className="hover:text-purple-electric transition-colors">{t('products', lang)} Catalog</Link></li>
             </ul>
           </div>
 
           {/* Column 2: Support */}
           <div className="md:col-span-2 space-y-3">
-            <h3 className="font-mono text-xs text-white font-bold uppercase tracking-wider">
+            <h3 className="font-mono text-xs text-foreground font-bold uppercase tracking-wider">
               {t('support', lang)}
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <button onClick={() => onTriggerComingSoon(t('documentation', lang))} className="hover:text-white transition-colors text-left">
+                <button onClick={() => onTriggerComingSoon(t('documentation', lang))} className="hover:text-foreground transition-colors text-left">
                   {t('documentation', lang)}
                 </button>
               </li>
               <li>
-                <button onClick={() => onTriggerComingSoon(t('forum', lang))} className="hover:text-white transition-colors text-left">
+                <button onClick={() => onTriggerComingSoon(t('forum', lang))} className="hover:text-foreground transition-colors text-left">
                   {t('forum', lang)}
                 </button>
               </li>
               <li>
-                <a href="#contact" className="hover:text-white transition-colors">
+                <a href="#contact" className="hover:text-foreground transition-colors">
                   {t('contactCategory', lang)}
                 </a>
               </li>
@@ -85,16 +86,16 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
 
           {/* Column 3: Socials & Language */}
           <div className="md:col-span-3 space-y-4">
-            <h3 className="font-mono text-xs text-white font-bold uppercase tracking-wider">
+            <h3 className="font-mono text-xs text-foreground font-bold uppercase tracking-wider">
               {t('stayConnected', lang)}
             </h3>
-            
+
             <div className="flex items-center space-x-3">
-              <a 
-                href="https://www.instagram.com/synchrotechrace?igsh=MTNpeWxvaGJpZGVqZw==" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-[#A855F7] text-white transition-colors"
+              <a
+                href="https://www.instagram.com/synchrotechrace?igsh=MTNpeWxvaGJpZGVqZw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl bg-foreground/5 hover:bg-purple-electric text-foreground transition-colors"
                 aria-label="Instagram"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
@@ -102,11 +103,11 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
                 </svg>
               </a>
 
-              <a 
-                href="https://www.tiktok.com/@synchrotech5?_r=1&_t=ZS-97aTFNxtGYq" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-[#A855F7] text-white transition-colors"
+              <a
+                href="https://www.tiktok.com/@synchrotech5?_r=1&_t=ZS-97aTFNxtGYq"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl bg-foreground/5 hover:bg-purple-electric text-foreground transition-colors"
                 aria-label="TikTok"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
@@ -114,11 +115,11 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
                 </svg>
               </a>
 
-              <a 
-                href="https://youtube.com/@synchrotech-y3e?si=3NjO-7c4f9GxW33W" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-[#A855F7] text-white transition-colors"
+              <a
+                href="https://youtube.com/@synchrotech-y3e?si=3NjO-7c4f9GxW33W"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-xl bg-foreground/5 hover:bg-purple-electric text-foreground transition-colors"
                 aria-label="YouTube"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
@@ -127,24 +128,28 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
               </a>
             </div>
 
-            <button
-              onClick={onToggleLang}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-mono text-xs flex items-center space-x-2 transition-colors border border-white/10"
-            >
-              <Globe size={14} className="text-[#A855F7]" />
-              <span>{lang === 'en' ? 'Bahasa Indonesia (ID)' : 'English (EN)'}</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onToggleLang}
+                className="px-4 py-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground font-mono text-xs flex items-center space-x-2 transition-colors border border-foreground/10"
+              >
+                <Globe size={14} className="text-purple-electric" />
+                <span>{lang === 'en' ? 'Bahasa Indonesia (ID)' : 'English (EN)'}</span>
+              </button>
+
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+        <div className="pt-8 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
           <div>© 2023 SynchroTech Racing Systems. All rights reserved.</div>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <button onClick={() => onTriggerComingSoon(t('privacyPolicy', lang))} className="hover:text-gray-300">
+            <button onClick={() => onTriggerComingSoon(t('privacyPolicy', lang))} className="hover:text-muted-foreground">
               {t('privacyPolicy', lang)}
             </button>
-            <button onClick={() => onTriggerComingSoon(t('termsOfService', lang))} className="hover:text-gray-300">
+            <button onClick={() => onTriggerComingSoon(t('termsOfService', lang))} className="hover:text-muted-foreground">
               {t('termsOfService', lang)}
             </button>
           </div>

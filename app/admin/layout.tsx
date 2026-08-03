@@ -61,7 +61,7 @@ export default function AdminLayout({
             alt="SynchroTech" 
             style={{ height: '26px', width: 'auto', objectFit: 'contain' }} 
           />
-          <span className="text-[9px] font-mono font-bold bg-purple-electric/20 text-[#C084FC] border border-purple-electric/30 px-2 py-0.5 rounded-md uppercase">
+          <span className="text-[9px] font-mono font-bold bg-purple-electric/20 text-purple-electric border border-purple-electric/30 px-2 py-0.5 uppercase">
             ADMIN
           </span>
         </div>

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter_Tight, Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const spaceGrotesk = Space_Grotesk({
+const interTight = Inter_Tight({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-space',
+  variable: '--font-inter-tight',
 });
 
 const inter = Inter({
@@ -36,13 +36,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="id" className={`${interTight.variable} ${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Sets the .light class before first paint so there's no flash of the wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var m=window.matchMedia('(prefers-color-scheme: light)').matches;if(t==='light'||(!t&&m)){document.documentElement.classList.add('light');}}catch(e){}})();`,
+          }}
+        />
         <link rel="icon" href="/logogram.png" type="image/png" />
         <link rel="shortcut icon" href="/logogram.png" type="image/png" />
         <link rel="apple-touch-icon" href="/logogram.png" />
       </head>
-      <body className="antialiased bg-background text-white font-sans selection:bg-purple-electric selection:text-white">
+      <body className="antialiased bg-background text-foreground font-sans selection:bg-purple-electric selection:text-white">
         {children}
       </body>
     </html>

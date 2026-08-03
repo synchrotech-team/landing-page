@@ -11,40 +11,39 @@ interface ComingSoonProps {
 
 export function ComingSoon({ pageName, onClose, lang }: ComingSoonProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07070A]/90 backdrop-blur-xl p-4 overflow-hidden">
-      {/* Background Telemetry Grid & Orbs */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4 overflow-hidden">
+      {/* Background Telemetry Grid */}
       <div className="absolute inset-0 telemetry-grid-bg pointer-events-none opacity-30" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 glow-orb-purple opacity-40 blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-lg w-full bg-[#0D0D14] border border-[#A855F7]/30 rounded-3xl p-8 text-center shadow-[0_0_50px_rgba(168,85,247,0.2)]">
-        <div className="w-16 h-16 rounded-2xl bg-[#A855F7]/15 text-[#A855F7] flex items-center justify-center mx-auto mb-6 border border-[#A855F7]/30">
+      <div className="relative z-10 max-w-lg w-full bg-surface border border-purple-electric/30 p-8 text-center">
+        <div className="w-16 h-16 bg-purple-electric/15 text-purple-electric flex items-center justify-center mx-auto mb-6 border border-purple-electric/30">
           <Cpu className="w-8 h-8 animate-pulse" />
         </div>
 
-        <span className="font-mono text-xs text-[#A855F7] font-bold tracking-widest uppercase mb-2 block">
+        <span className="font-mono text-xs text-purple-electric font-bold tracking-widest uppercase mb-2 block">
           {t('systemUpdate', lang)}
         </span>
 
-        <h2 className="font-display text-3xl font-extrabold text-white uppercase tracking-tight mb-4">
+        <h2 className="font-display text-3xl font-extrabold text-foreground uppercase tracking-tighter mb-4">
           {t('comingSoonTitle', lang)}
         </h2>
 
-        <p className="text-gray-300 text-sm leading-relaxed mb-8">
+        <p className="text-muted-foreground text-sm leading-relaxed mb-8">
           {t('comingSoonDesc', lang).replace('{page}', pageName)}
         </p>
 
         {/* Progress Bar */}
-        <div className="w-full bg-white/5 border border-white/10 rounded-full h-3 overflow-hidden mb-8 p-0.5">
-          <div className="bg-gradient-to-r from-[#A855F7] to-[#FF8A00] h-full rounded-full w-[87%] animate-pulse" />
+        <div className="w-full bg-foreground/5 border border-foreground/10 h-3 overflow-hidden mb-8 p-0.5">
+          <div className="bg-purple-electric h-full w-[87%] animate-pulse" />
         </div>
 
-        <div className="font-mono text-xs text-gray-400 mb-8">
+        <div className="font-mono text-xs text-muted-foreground mb-8">
           {t('establishingTelemetry', lang)}
         </div>
 
         <button
           onClick={onClose}
-          className="w-full py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all duration-300 border border-white/15 cursor-pointer"
+          className="w-full py-3.5 rounded-xl bg-foreground/10 hover:bg-foreground/20 text-foreground font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all duration-300 border border-foreground/15 cursor-pointer"
         >
           <ArrowLeft size={16} />
           <span>{t('backToHome', lang)}</span>

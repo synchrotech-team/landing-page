@@ -191,7 +191,7 @@ export default function LicenseManagementPage() {
           />
         </div>
         <button className="action-btn action-btn-outline" onClick={fetchData} title="Refresh data">
-          <RefreshCw size={16} className={loading ? 'spinner' : ''} />
+          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
 
@@ -201,7 +201,7 @@ export default function LicenseManagementPage() {
         <div className="licenses-table-panel">
           {loading && licenses.length === 0 ? (
             <div className="loading-container">
-              <RefreshCw size={24} className="spinner" />
+              <RefreshCw size={24} className="animate-spin" />
               <p>Memuat data lisensi...</p>
             </div>
           ) : filteredLicenses.length === 0 ? (
@@ -227,7 +227,7 @@ export default function LicenseManagementPage() {
                       onClick={() => setSelectedLicense(selectedLicense?.id === lic.id ? null : lic)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <td style={{ fontFamily: 'monospace', fontWeight: 700, color: '#a855f7' }}>
+                      <td style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--color-purple-electric)' }}>
                         {lic.licenseKey}
                       </td>
                       <td>{lic.customer.teamName}</td>
@@ -239,7 +239,7 @@ export default function LicenseManagementPage() {
                       <td>{formatExpiryDate(lic.expiryDate)}</td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <Laptop size={14} style={{ color: '#9ca3af' }} />
+                          <Laptop size={14} style={{ color: 'var(--color-muted-foreground)' }} />
                           <span>{lic.devices.length} / {lic.maxDevices}</span>
                         </div>
                       </td>
@@ -319,7 +319,7 @@ export default function LicenseManagementPage() {
                 </button>
               </div>
 
-              <h4 style={{ fontSize: '13px', marginTop: '24px', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '8px' }}>
+              <h4 style={{ fontSize: '13px', marginTop: '24px', marginBottom: '12px', borderBottom: '1px solid var(--color-border)', paddingBottom: '8px' }}>
                 Connected Hardware ({selectedLicense.devices.length})
               </h4>
 
@@ -367,7 +367,6 @@ export default function LicenseManagementPage() {
                   value={customerId}
                   onChange={(e) => setCustomerId(e.target.value)}
                   disabled={submitting}
-                  style={{ width: '100%', background: 'rgba(7, 11, 19, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '8px', padding: '10px', color: '#ffffff' }}
                 >
                   <option value="">-- Pilih Customer --</option>
                   {customers.map((c) => (
@@ -383,7 +382,6 @@ export default function LicenseManagementPage() {
                   value={expiryOption}
                   onChange={(e) => setExpiryOption(e.target.value)}
                   disabled={submitting}
-                  style={{ width: '100%', background: 'rgba(7, 11, 19, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '8px', padding: '10px', color: '#ffffff' }}
                 >
                   <option value="1m">1 Bulan</option>
                   <option value="3m">3 Bulan</option>
@@ -413,7 +411,6 @@ export default function LicenseManagementPage() {
                   value={maxDevices}
                   onChange={(e) => setMaxDevices(e.target.value)}
                   disabled={submitting}
-                  style={{ width: '100%', background: 'rgba(7, 11, 19, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '8px', padding: '10px', color: '#ffffff' }}
                 >
                   <option value="1">1 Device (Default)</option>
                   <option value="2">2 Device</option>
@@ -436,7 +433,7 @@ export default function LicenseManagementPage() {
                   className="action-btn action-btn-primary"
                   disabled={submitting}
                 >
-                  {submitting ? <RefreshCw size={14} className="spinner" /> : <Check size={14} />} 
+                  {submitting ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />}
                   <span> Generate</span>
                 </button>
               </div>

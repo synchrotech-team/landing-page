@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { name: 'Total Customers', value: totalCustomers, icon: Users, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
-    { name: 'Total Licenses', value: totalLicenses, icon: Key, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)' },
+    { name: 'Total Licenses', value: totalLicenses, icon: Key, color: '#A149FA', bg: 'rgba(161, 73, 250, 0.1)' },
     { name: 'Active Licenses', value: activeLicenses, icon: CheckCircle2, color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' },
     { name: 'Inactive Licenses', value: inactiveLicenses, icon: AlertTriangle, color: '#eab308', bg: 'rgba(234, 179, 8, 0.1)' },
     { name: 'Revoked Licenses', value: revokedLicenses, icon: XCircle, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)' },
@@ -126,7 +126,7 @@ export default async function AdminDashboardPage() {
                 <tbody>
                   {recentLicenses.map((lic) => (
                     <tr key={lic.id}>
-                      <td style={{ fontFamily: 'monospace', fontWeight: 600, color: '#a855f7' }}>
+                      <td style={{ fontFamily: 'monospace', fontWeight: 600, color: 'var(--color-purple-electric)' }}>
                         {lic.licenseKey}
                       </td>
                       <td>{lic.customer?.teamName || 'N/A'}</td>

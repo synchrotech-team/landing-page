@@ -147,14 +147,14 @@ export default function CustomerManagementPage() {
           />
         </div>
         <button className="action-btn action-btn-outline" onClick={fetchCustomers} title="Refresh data">
-          <RefreshCw size={16} className={loading ? 'spinner' : ''} />
+          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
 
       {/* Content area */}
       {loading && customers.length === 0 ? (
         <div className="loading-container">
-          <RefreshCw size={24} className="spinner" />
+          <RefreshCw size={24} className="animate-spin" />
           <p>Memuat data customer...</p>
         </div>
       ) : filteredCustomers.length === 0 ? (
@@ -177,7 +177,7 @@ export default function CustomerManagementPage() {
             <tbody>
               {filteredCustomers.map((cust) => (
                 <tr key={cust.id}>
-                  <td style={{ fontWeight: 600, color: '#ffffff' }}>{cust.teamName}</td>
+                  <td style={{ fontWeight: 600, color: 'var(--color-foreground)' }}>{cust.teamName}</td>
                   <td>{cust.email || '-'}</td>
                   <td>{cust.phone || '-'}</td>
                   <td>
@@ -284,7 +284,7 @@ export default function CustomerManagementPage() {
                   className="action-btn action-btn-primary"
                   disabled={submitting}
                 >
-                  {submitting ? <RefreshCw size={14} className="spinner" /> : <Check size={14} />} 
+                  {submitting ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />}
                   {editId ? ' Simpan Perubahan' : ' Tambahkan'}
                 </button>
               </div>

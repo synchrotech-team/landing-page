@@ -78,7 +78,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-purple-electric selection:text-white flex flex-col justify-between">
+    <div className="min-h-screen bg-background text-foreground selection:bg-purple-electric selection:text-white flex flex-col justify-between">
       {/* Floating Navbar */}
       <Navbar 
         lang={lang} 
@@ -88,13 +88,11 @@ export default function ProductsPage() {
 
       <main className="flex-1">
         {/* Page Hero Banner */}
-        <section className="relative py-20 bg-linear-to-b from-[#1A0A2E]/60 to-background border-b border-white/5 telemetry-grid-bg overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 glow-orb-purple opacity-30 blur-3xl pointer-events-none" />
-
+        <section className="relative py-20 bg-background border-b border-foreground/5 telemetry-grid-bg overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 md:px-8 text-center relative z-10">
             {/* Breadcrumb */}
-            <div className="flex items-center justify-center space-x-2 text-xs text-gray-400 mb-6 font-mono">
-              <Link href="/" className="hover:text-white transition-colors">
+            <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground mb-6 font-mono">
+              <Link href="/" className="hover:text-foreground transition-colors">
                 {lang === 'id' ? 'Beranda' : 'Home'}
               </Link>
               <ChevronRight size={14} />
@@ -107,11 +105,11 @@ export default function ProductsPage() {
               {lang === 'id' ? 'LINI PERANGKAT KERAS TELEMETRI' : 'TELEMETRY HARDWARE LINEUP'}
             </span>
 
-            <h1 className="font-display text-4xl sm:text-6xl font-extrabold text-white tracking-tight uppercase mb-6 leading-tight max-w-4xl mx-auto">
+            <h1 className="font-display text-4xl sm:text-6xl font-extrabold text-foreground tracking-tight uppercase mb-6 leading-tight max-w-4xl mx-auto">
               {lang === 'id' ? 'Katalog Perangkat Keras Balap' : 'Racing Hardware Catalog'}
             </h1>
 
-            <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
               {lang === 'id'
                 ? 'Temukan sistem telemetri presisi yang dirancang khusus untuk memantau, menganalisis, dan meningkatkan performa kendaraan balap Anda di lintasan.'
                 : 'Discover precision telemetry systems designed to capture, analyze, and optimize your vehicle performance on track.'}
@@ -124,15 +122,15 @@ export default function ProductsPage() {
           <div className="max-w-7xl mx-auto px-4 md:px-8">
             {/* Controls Bar */}
             <MotionReveal>
-              <div className="flex flex-wrap gap-4 justify-between items-center bg-surface border border-white/10 rounded-2xl p-4 md:p-6 mb-12 backdrop-blur-xl">
+              <div className="flex flex-wrap gap-4 justify-between items-center bg-surface border border-foreground/10 p-4 md:p-6 mb-12">
                 {/* Category Filter Tabs */}
                 <div className="flex gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedCategory('all')}
                     className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
                       selectedCategory === 'all' 
-                        ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                        : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-purple-electric text-white'
+                        : 'bg-foreground/5 text-muted-foreground hover:text-foreground hover:bg-foreground/10'
                     }`}
                   >
                     {lang === 'id' ? 'Semua Produk' : 'All Products'} ({rawProducts.length})
@@ -141,8 +139,8 @@ export default function ProductsPage() {
                     onClick={() => setSelectedCategory('hub')}
                     className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
                       selectedCategory === 'hub' 
-                        ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                        : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-purple-electric text-white'
+                        : 'bg-foreground/5 text-muted-foreground hover:text-foreground hover:bg-foreground/10'
                     }`}
                   >
                     4G LTE Hub
@@ -151,8 +149,8 @@ export default function ProductsPage() {
                     onClick={() => setSelectedCategory('energy')}
                     className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
                       selectedCategory === 'energy' 
-                        ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                        : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-purple-electric text-white'
+                        : 'bg-foreground/5 text-muted-foreground hover:text-foreground hover:bg-foreground/10'
                     }`}
                   >
                     {lang === 'id' ? 'Perekam Energi' : 'Energy Logger'}
@@ -161,8 +159,8 @@ export default function ProductsPage() {
                     onClick={() => setSelectedCategory('display')}
                     className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase transition-all duration-300 cursor-pointer ${
                       selectedCategory === 'display' 
-                        ? 'bg-purple-electric text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' 
-                        : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-purple-electric text-white'
+                        : 'bg-foreground/5 text-muted-foreground hover:text-foreground hover:bg-foreground/10'
                     }`}
                   >
                     Cockpit Display
@@ -171,13 +169,13 @@ export default function ProductsPage() {
 
                 {/* Search Input Box */}
                 <div className="relative w-full md:w-72">
-                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input 
                     type="text"
                     placeholder={lang === 'id' ? 'Cari produk...' : 'Search products...'}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-purple-electric transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface border border-foreground/10 text-foreground placeholder-muted-foreground text-xs focus:outline-none focus:border-purple-electric transition-colors"
                   />
                 </div>
               </div>
@@ -185,24 +183,24 @@ export default function ProductsPage() {
 
             {/* Products Grid */}
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20 bg-surface border border-white/10 rounded-2xl">
-                <h3 className="text-lg font-bold text-white mb-2">Tidak ada produk yang cocok</h3>
-                <p className="text-xs text-gray-400">Coba ubah kata kunci pencarian atau kategori filter Anda.</p>
+              <div className="text-center py-20 bg-surface border border-foreground/10 rounded-2xl">
+                <h3 className="text-lg font-bold text-foreground mb-2">Tidak ada produk yang cocok</h3>
+                <p className="text-xs text-muted-foreground">Coba ubah kata kunci pencarian atau kategori filter Anda.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                 {filteredProducts.map((prod, idx) => (
                   <MotionReveal key={prod.slug} delay={idx * 0.1}>
-                    <div className="h-full group rounded-2xl bg-surface border border-white/10 p-6 flex flex-col justify-between hover:border-purple-electric/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] transition-all duration-300 backdrop-blur-xl">
+                    <div className="h-full group bg-surface border border-foreground/10 p-6 flex flex-col justify-between hover:border-purple-electric/50 transition-colors duration-150">
                       <div>
                         {/* Header Badge & Stock */}
                         <div className="flex justify-between items-center mb-4">
                           <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase ${
                             prod.badgeType === 'blue' 
                               ? 'bg-[#3B82F6]/20 text-[#60A5FA] border border-[#3B82F6]/30' 
-                              : prod.badgeType === 'purple' 
-                              ? 'bg-purple-electric/20 text-[#C084FC] border border-purple-electric/30' 
-                              : 'bg-white/10 text-gray-300'
+                              : prod.badgeType === 'purple'
+                              ? 'bg-purple-electric/20 text-purple-electric border border-purple-electric/30'
+                              : 'bg-foreground/10 text-muted-foreground'
                           }`}>
                             {prod.badge}
                           </span>
@@ -213,7 +211,7 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Product Image Container */}
-                        <div className="w-full h-48 rounded-xl overflow-hidden mb-6 bg-black border border-white/10 flex items-center justify-center">
+                        <div className="w-full h-48 rounded-xl overflow-hidden mb-6 bg-black border border-foreground/10 flex items-center justify-center">
                           <img 
                             src={prod.image} 
                             alt={prod.name} 
@@ -222,24 +220,24 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Title & Subtitle */}
-                        <h2 className="font-display text-2xl font-bold text-white mb-1">
+                        <h2 className="font-display text-2xl font-bold text-foreground mb-1">
                           {prod.name}
                         </h2>
                         <p className="text-xs text-purple-electric font-mono font-semibold mb-4">
                           {prod.subtitle}
                         </p>
-                        <p className="text-gray-300 text-xs leading-relaxed mb-6">
+                        <p className="text-muted-foreground text-xs leading-relaxed mb-6">
                           {prod.description}
                         </p>
 
                         {/* Key Specs List */}
-                        <div className="border-t border-white/5 pt-4 mb-6">
-                          <div className="text-[10px] text-gray-400 font-mono font-bold uppercase tracking-wider mb-2">
+                        <div className="border-t border-foreground/5 pt-4 mb-6">
+                          <div className="text-[10px] text-muted-foreground font-mono font-bold uppercase tracking-wider mb-2">
                             {lang === 'id' ? 'Fitur Utama:' : 'Key Features:'}
                           </div>
                           <ul className="space-y-2">
                             {prod.keySpecs.slice(0, 3).map((spec, i) => (
-                              <li key={i} className="flex items-center space-x-2 text-xs text-gray-300">
+                              <li key={i} className="flex items-center space-x-2 text-xs text-muted-foreground">
                                 <Check size={14} className="text-purple-electric shrink-0" />
                                 <span className="truncate">{spec}</span>
                               </li>
@@ -250,9 +248,9 @@ export default function ProductsPage() {
 
                       {/* Price & Action Buttons */}
                       <div>
-                        <div className="flex justify-between items-baseline mb-4 pt-4 border-t border-white/5">
-                          <span className="text-xs text-gray-400 font-mono">Harga Resmi:</span>
-                          <span className="font-mono text-xl font-bold text-white">
+                        <div className="flex justify-between items-baseline mb-4 pt-4 border-t border-foreground/5">
+                          <span className="text-xs text-muted-foreground font-mono">Harga Resmi:</span>
+                          <span className="font-mono text-xl font-bold text-foreground">
                             {prod.price}
                           </span>
                         </div>
@@ -260,7 +258,7 @@ export default function ProductsPage() {
                         <div className="flex space-x-3">
                           <Link 
                             href={`/products/${prod.slug}`}
-                            className="flex-1 py-3 rounded-xl bg-purple-electric text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:bg-[#9333EA] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300"
+                            className="flex-1 py-3 bg-purple-electric text-white font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 hover:brightness-90 transition-all duration-300"
                           >
                             <span>Detail</span>
                             <ArrowRight size={14} />
@@ -285,19 +283,19 @@ export default function ProductsPage() {
 
             {/* Integrated System Banner */}
             <MotionReveal delay={0.3}>
-              <div className="mt-20 rounded-3xl bg-linear-to-r from-[#1A0A2E] via-[#2D1B4E] to-[#1A0A2E] border border-purple-electric/30 p-10 md:p-14 text-center shadow-[0_0_50px_rgba(168,85,247,0.2)]">
+              <div className="mt-20 bg-surface border border-purple-electric/30 p-10 md:p-14 text-center">
                 <span className="font-mono text-xs text-orange-motorsport font-bold tracking-widest uppercase mb-3 block">
                   EKOSISTEM SYNCHROTECH
                 </span>
-                <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-white uppercase tracking-tight mb-4">
+                <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-foreground uppercase tracking-tight mb-4">
                   Bekerja Bersama Dalam Satu Jaringan CAN Bus Presisi
                 </h2>
-                <p className="text-gray-300 text-sm max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-muted-foreground text-sm max-w-2xl mx-auto leading-relaxed mb-8">
                   Nexus One, Joulemeter, dan Display dirancang secara modular. Terhubung tanpa celah melalui jaringan CAN Bus untuk mengirimkan telemetry data real-time langsung ke aplikasi Podium Cloud.
                 </p>
                 <Link 
                   href="/#contact"
-                  className="inline-flex items-center space-x-2 px-8 py-4 rounded-xl bg-orange-motorsport text-black font-display text-xs font-bold uppercase tracking-wider hover:bg-[#E07D0A] transition-all duration-300 shadow-lg"
+                  className="inline-flex items-center space-x-2 px-8 py-4 bg-orange-motorsport text-black font-display text-xs font-bold uppercase tracking-wider hover:brightness-90 transition-all duration-300"
                 >
                   <span>Konsultasi Sistem Balap Anda</span>
                   <ArrowRight size={16} />

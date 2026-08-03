@@ -25,15 +25,15 @@ export function MotionReveal({
   const getVariants = () => {
     switch (direction) {
       case 'up':
-        return { hidden: { opacity: 0, y: 24, filter: 'blur(6px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } };
+        return { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
       case 'down':
-        return { hidden: { opacity: 0, y: -24, filter: 'blur(6px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } };
+        return { hidden: { opacity: 0, y: -24 }, visible: { opacity: 1, y: 0 } };
       case 'left':
-        return { hidden: { opacity: 0, x: 24, filter: 'blur(6px)' }, visible: { opacity: 1, x: 0, filter: 'blur(0px)' } };
+        return { hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0 } };
       case 'right':
-        return { hidden: { opacity: 0, x: -24, filter: 'blur(6px)' }, visible: { opacity: 1, x: 0, filter: 'blur(0px)' } };
+        return { hidden: { opacity: 0, x: -24 }, visible: { opacity: 1, x: 0 } };
       default:
-        return { hidden: { opacity: 0, filter: 'blur(6px)' }, visible: { opacity: 1, filter: 'blur(0px)' } };
+        return { hidden: { opacity: 0 }, visible: { opacity: 1 } };
     }
   };
 
