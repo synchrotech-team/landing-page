@@ -30,43 +30,12 @@ export async function GET(req: NextRequest) {
 
         const fileUrl = targetRelease.fileUrl;
 
-        // Secure file stream proxy for Vercel Blob (handles Private Store & Public Store)
-        if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
-          try {
-            const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-            const headers: Record<string, string> = {};
-            if (blobToken) {
-              headers['Authorization'] = `Bearer ${blobToken}`;
-            }
-
-            const response = await fetch(fileUrl, { headers });
-
-            if (response.ok) {
-              const resHeaders = new Headers();
-              resHeaders.set('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
-              resHeaders.set(
-                'Content-Disposition',
-                `attachment; filename="${targetRelease.fileName || 'SynchroTech_Setup.exe'}"`
-              );
-              if (response.headers.get('content-length')) {
-                resHeaders.set('Content-Length', response.headers.get('content-length')!);
-              }
-
-              return new NextResponse(response.body, {
-                status: 200,
-                headers: resHeaders,
-              });
-            }
-          } catch (fetchErr) {
-            console.warn('Vercel Blob stream error, falling back to direct URL redirect:', fetchErr);
-          }
-
-          // Fallback direct URL redirect
-          return NextResponse.redirect(fileUrl);
-        }
-
-        // Local file redirect
-        return NextResponse.redirect(new URL(fileUrl, req.url));
+        // Public Vercel Blob URLs are stored as their native downloadUrl
+        // (?download=1, served with Content-Disposition: attachment straight
+        // from the CDN edge) — redirect instead of proxying bytes through
+        // this function. Local /downloads/* fallback paths redirect the same way.
+        const isAbsolute = fileUrl.startsWith('http://') || fileUrl.startsWith('https://');
+        return NextResponse.redirect(isAbsolute ? fileUrl : new URL(fileUrl, req.url));
       }
 
       // Default Fallback

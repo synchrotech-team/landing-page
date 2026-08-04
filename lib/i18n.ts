@@ -1,3 +1,5 @@
+import { useState, useEffect, type Dispatch, type SetStateAction } from 'react';
+
 export const translations = {
   en: {
     // Nav & Utilities
@@ -191,4 +193,25 @@ export type Language = 'en' | 'id';
 
 export function t(key: keyof typeof translations['en'], lang: Language): string {
   return translations[lang][key] || translations['en'][key] || key;
+}
+
+const LANG_STORAGE_KEY = 'synchrotech-lang';
+
+export function useLang(): [Language, Dispatch<SetStateAction<Language>>] {
+  const [lang, setLangState] = useState<Language>('id');
+
+  useEffect(() => {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    if (stored === 'en' || stored === 'id') setLangState(stored);
+  }, []);
+
+  const setLang: Dispatch<SetStateAction<Language>> = (value) => {
+    setLangState(prev => {
+      const next = value instanceof Function ? value(prev) : value;
+      localStorage.setItem(LANG_STORAGE_KEY, next);
+      return next;
+    });
+  };
+
+  return [lang, setLang];
 }

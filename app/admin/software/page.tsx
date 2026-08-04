@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { 
+import { upload } from '@vercel/blob/client';
+import {
   Download, 
   Upload, 
   RefreshCw, 
@@ -76,6 +77,15 @@ export default function AdminSoftwarePage() {
 
   const activeRelease = releases.find(r => r.isActive) || releases[0];
 
+  const extractVersionFromFileName = (name: string): string => {
+    const match = name.match(/v?(\d+\.\d+(?:\.\d+)?)/i);
+    if (match) {
+      const ver = match[1];
+      return ver.toLowerCase().startsWith('v') ? ver : `v${ver}`;
+    }
+    return 'v1.0.0';
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -85,27 +95,24 @@ export default function AdminSoftwarePage() {
     setSuccessMsg('');
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/admin/software/upload', {
-        method: 'POST',
-        body: formData,
+      // Uploads straight from the browser to Vercel Blob — the file never
+      // passes through our server, so there's no body-size limit to hit.
+      const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
+      const blob = await upload(`software/${Date.now()}/${safeName}`, file, {
+        access: 'public',
+        handleUploadUrl: '/api/admin/software/upload',
+        multipart: true,
       });
 
-      const data = await res.json();
-      if (data.success) {
-        setFileUrl(data.fileUrl);
-        setFileName(data.fileName);
-        setFileSize(data.fileSize);
-        setStorageType(data.storage);
-        if (data.extractedVersion) {
-          setVersion(data.extractedVersion);
-        }
-        setSuccessMsg(`File "${data.fileName}" (${data.fileSize}) berhasil diunggah! Versi otomatis terdeteksi: ${data.extractedVersion || version}`);
-      } else {
-        setErrorMsg(data.error || 'Gagal mengunggah file installer');
-      }
+      const sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+      const extractedVersion = extractVersionFromFileName(file.name);
+
+      setFileUrl(blob.downloadUrl);
+      setFileName(file.name);
+      setFileSize(sizeStr);
+      setStorageType('vercel-blob');
+      setVersion(extractedVersion);
+      setSuccessMsg(`File "${file.name}" (${sizeStr}) berhasil diunggah! Versi otomatis terdeteksi: ${extractedVersion}`);
     } catch (err) {
       console.error('Upload catch error:', err);
       setErrorMsg('Gagal mengunggah file installer .exe');
@@ -341,7 +348,7 @@ export default function AdminSoftwarePage() {
           </div>
 
           {/* Form Metadata Fields */}
-          <div className="grid grid-cols-2 gap-5 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
             <div className="form-group space-y-2">
               <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Judul Perangkat Lunak (ID)</label>
               <input 
@@ -366,7 +373,7 @@ export default function AdminSoftwarePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="form-group space-y-2">
               <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Versi Software *</label>
               <input 
@@ -426,7 +433,7 @@ export default function AdminSoftwarePage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="form-group space-y-2">
               <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Catatan Rilis Build (ID)</label>
               <textarea 

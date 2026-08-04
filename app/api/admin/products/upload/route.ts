@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
@@ -26,25 +26,14 @@ export async function POST(req: NextRequest) {
 
     const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
 
-    // Option 1: Use Vercel Blob Cloud Storage (Public or Private Store)
+    // Option 1: Use Vercel Blob Cloud Storage (public — served straight off Vercel's
+    // CDN edge, no server-side proxy needed for delivery)
     if (blobToken) {
       try {
-        let blob;
-        try {
-          blob = await put(`products/${fileName}`, file, {
-            access: 'public',
-            token: blobToken,
-          });
-        } catch (accessErr: any) {
-          if (accessErr.message?.includes('private access') || accessErr.message?.includes('private store')) {
-            blob = await put(`products/${fileName}`, file, {
-              access: 'private',
-              token: blobToken,
-            });
-          } else {
-            throw accessErr;
-          }
-        }
+        const blob = await put(`products/${fileName}`, file, {
+          access: 'public',
+          token: blobToken,
+        });
 
         return NextResponse.json({
           success: true,
@@ -78,5 +67,27 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error('Image Upload Error:', error);
     return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const url = req.nextUrl.searchParams.get('url');
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+    // Only ever delete actual Vercel Blob objects — never touch static/local seed assets.
+    if (url && blobToken && url.includes('.blob.vercel-storage.com/')) {
+      await del(url, { token: blobToken });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error('Image Delete Error:', error);
+    return NextResponse.json({ error: 'Failed to delete image' }, { status: 500 });
   }
 }

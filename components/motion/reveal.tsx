@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { ReactNode } from 'react';
+import { useIsMobile } from './use-is-mobile';
 
 interface MotionRevealProps {
   children: ReactNode;
@@ -17,8 +18,9 @@ export function MotionReveal({
   className = '',
 }: MotionRevealProps) {
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
 
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || isMobile) {
     return <div className={className}>{children}</div>;
   }
 

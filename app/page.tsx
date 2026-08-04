@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Language } from '@/lib/i18n';
+import { useLang } from '@/lib/i18n';
 import { Navbar } from '@/components/landing/navbar';
 import { Hero } from '@/components/landing/hero';
 import { Products } from '@/components/landing/products';
@@ -14,7 +14,7 @@ import { Footer } from '@/components/landing/footer';
 import { ComingSoon } from '@/components/landing/coming-soon';
 
 export default function Page() {
-  const [lang, setLang] = useState<Language>('id');
+  const [lang, setLang] = useLang();
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonPage, setComingSoonPage] = useState('');
 

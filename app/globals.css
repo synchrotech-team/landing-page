@@ -147,7 +147,7 @@ body {
 /* Ultra-Premium Dark Motorsport Admin Dashboard Styles */
 .admin-layout-container {
   display: flex;
-  min-height: 100vh;
+  height: 100dvh;
   background-color: var(--color-background);
   color: var(--color-foreground);
   position: relative;
@@ -171,8 +171,25 @@ body {
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  z-index: 10;
-  flex-shrink: 0;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  z-index: 40;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+}
+
+.admin-sidebar.admin-sidebar-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(0);
+    z-index: 10;
+  }
 }
 
 .sidebar-brand {
@@ -249,6 +266,13 @@ body {
   z-index: 5;
   overflow-y: auto;
   position: relative;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .admin-main-content {
+    margin-left: 270px;
+  }
 }
 
 .admin-top-bar {
@@ -258,7 +282,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 16px;
+}
+
+@media (min-width: 640px) {
+  .admin-top-bar {
+    padding: 0 32px;
+  }
 }
 
 .welcome-text {
@@ -296,9 +326,15 @@ body {
 }
 
 .admin-page-content {
-  padding: 32px;
+  padding: 16px;
   flex-grow: 1;
   box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .admin-page-content {
+    padding: 32px;
+  }
 }
 
 .dash-card {
@@ -425,6 +461,59 @@ body {
   font-size: 13px;
 }
 
+.split-panel > h3 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  margin: 0 0 20px;
+  text-transform: uppercase;
+}
+
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.guide-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.guide-step:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.guide-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-purple-electric) 12%, transparent);
+  color: var(--color-purple-electric);
+}
+
+.guide-step h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-foreground);
+  margin: 0 0 4px;
+}
+
+.guide-step p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-muted-foreground);
+  margin: 0;
+}
+
 .action-btn {
   display: inline-flex;
   align-items: center;
@@ -539,6 +628,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -552,6 +643,7 @@ body {
 
 .search-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -641,6 +733,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
   z-index: 100;
   animation: fadeIn 0.2s ease-out;
 }
@@ -649,8 +742,9 @@ body {
   background: var(--color-surface);
   border: 1px solid rgba(161, 73, 250, 0.3);
   width: 100%;
+  max-height: 100%;
   animation: scaleUp 0.2s ease-out;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .modal-content-sm {
@@ -663,7 +757,6 @@ body {
 
 .modal-content-full {
   max-width: 1200px;
-  width: 92vw;
 }
 
 .modal-header {
@@ -901,8 +994,18 @@ body {
 
 .login-logo {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
   margin-bottom: 24px;
+}
+
+.login-logo-text {
+  font-family: var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-foreground);
+  letter-spacing: -0.01em;
 }
 
 .login-card h2 {

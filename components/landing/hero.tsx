@@ -4,6 +4,7 @@ import { ArrowRight, Play, Cpu, Radio, Zap } from 'lucide-react';
 import { Language, t } from '@/lib/i18n';
 import { MotionReveal } from '@/components/motion/reveal';
 import { MotionCounter } from '@/components/motion/counter';
+import { ScrollFillWords } from '@/components/motion/scroll-fill-text';
 import { Button } from '@/components/ui/button';
 
 interface HeroProps {
@@ -34,13 +35,13 @@ export function Hero({ lang, onExploreClick, onDemoClick }: HeroProps) {
                 <>
                   Precision <br />
                   Telemetry For <br />
-                  <span className="text-purple-electric">Every Track Level</span>
+                  <ScrollFillWords words={['Every', 'Track', 'Level']} />
                 </>
               ) : (
                 <>
                   Telemetri Presisi <br />
                   Untuk Setiap <br />
-                  <span className="text-purple-electric">Level Lintasan</span>
+                  <ScrollFillWords words={['Level', 'Lintasan']} />
                 </>
               )}
             </h1>

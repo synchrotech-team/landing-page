@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'framer-motion';
+import { useIsMobile } from './use-is-mobile';
 
 interface MotionCounterProps {
   value: number;
@@ -23,11 +24,12 @@ export function MotionCounter({
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-40px' });
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     if (!isInView) return;
-    if (shouldReduceMotion) {
+    if (shouldReduceMotion || isMobile) {
       setDisplayValue(value);
       return;
     }
@@ -50,7 +52,7 @@ export function MotionCounter({
     };
 
     requestAnimationFrame(updateCounter);
-  }, [isInView, value, duration, shouldReduceMotion]);
+  }, [isInView, value, duration, shouldReduceMotion, isMobile]);
 
   return (
     <span ref={ref} className={className}>

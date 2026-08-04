@@ -102,11 +102,14 @@ export function Navbar({ lang, onToggleLang, onTriggerComingSoon }: NavbarProps)
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <img 
-              src="/logotype.png" 
-              alt="SynchroTech" 
-              className="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+            <img
+              src="/logogram.png"
+              alt="SynchroTech"
+              className="h-8 md:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
+            <span className="font-display text-lg md:text-xl font-extrabold text-foreground tracking-tight">
+              SynchroTech
+            </span>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -187,7 +190,7 @@ export function Navbar({ lang, onToggleLang, onTriggerComingSoon }: NavbarProps)
               <span>Download Desktop Software (.exe)</span>
             </Link>
 
-            <button 
+            <button
               onClick={() => { setMobileMenuOpen(false); onTriggerComingSoon(t('solutions', lang)); }}
               className="block w-full text-left text-base font-medium text-muted-foreground hover:text-purple-electric"
             >

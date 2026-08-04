@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { resolveImageSrc } from '../../../lib/blob-image';
 import { 
   Package, 
   Plus, 
@@ -42,12 +43,40 @@ interface ProductItem {
   keySpecsJson: string | null;
   keySpecsJsonEn: string | null;
   image: string;
-  mockupType: string;
   specsJson: string | null;
   featuresJson: string | null;
   featuresJsonEn: string | null;
   inTheBoxJson: string | null;
   inTheBoxJsonEn: string | null;
+}
+
+const DEFAULT_PRODUCT_IMAGE = '/products/coming-soon.svg';
+
+// Downscale + re-encode to WebP in-browser before upload. Falls back to the
+// original file if compression fails or doesn't actually shrink it.
+async function compressImage(file: File, maxWidth = 1600, quality = 0.82): Promise<File> {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, maxWidth / bitmap.width);
+    const width = Math.round(bitmap.width * scale);
+    const height = Math.round(bitmap.height * scale);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return file;
+    ctx.drawImage(bitmap, 0, 0, width, height);
+
+    const blob: Blob | null = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', quality));
+    if (!blob || blob.size >= file.size) return file;
+
+    const newName = file.name.replace(/\.[^.]+$/, '') + '.webp';
+    return new File([blob], newName, { type: 'image/webp' });
+  } catch (err) {
+    console.warn('Image compression skipped, using original file:', err);
+    return file;
+  }
 }
 
 export default function AdminProductsPage() {
@@ -73,8 +102,7 @@ export default function AdminProductsPage() {
   const [badge, setBadge] = useState('Paling Populer');
   const [badgeEn, setBadgeEn] = useState('Most Popular');
   const [badgeType, setBadgeType] = useState('purple');
-  const [image, setImage] = useState('/products/joulemeter.png');
-  const [mockupType, setMockupType] = useState('joulemeter');
+  const [image, setImage] = useState(DEFAULT_PRODUCT_IMAGE);
 
   const [subtitle, setSubtitle] = useState('');
   const [subtitleEn, setSubtitleEn] = useState('');
@@ -111,25 +139,24 @@ export default function AdminProductsPage() {
     setActiveTab('main');
     setName('');
     setSlug('');
-    setCategory('Master Telemetry Hub');
-    setPrice('Rp 5.000.000');
+    setCategory('');
+    setPrice('');
     setStockStatus('Ready Stock');
     setStockStatusEn('In Stock');
-    setBadge('Paling Populer');
-    setBadgeEn('Most Popular');
+    setBadge('');
+    setBadgeEn('');
     setBadgeType('purple');
-    setImage('/products/joulemeter.png');
-    setMockupType('joulemeter');
-    setSubtitle('Pusat Komando Telemetri Balap');
-    setSubtitleEn('Master Telemetry Command Center');
-    setDescription('Sistem telemetri presisi tinggi untuk rekam data kendaraan balap Anda.');
-    setDescriptionEn('High precision racing telemetry system for your race vehicle.');
-    setLongDescription('Modul perangkat keras SynchroTech yang dirancang khusus untuk lingkungan balapan ekstrem dengan presisi tinggi.');
-    setLongDescriptionEn('SynchroTech hardware module engineered for extreme high-precision racing telemetry environments.');
-    setKeySpecsText("ADS1256 24-bit Delta-Sigma ADC\nIsolated CAN Bus Interface 2.5kV\n4G LTE Multi-Band Real-Time Streaming");
-    setKeySpecsTextEn("ADS1256 24-bit Delta-Sigma ADC\nIsolated CAN Bus Interface 2.5kV\n4G LTE Multi-Band Real-Time Streaming");
-    setInTheBoxText("1x SynchroTech Hardware Module\n1x Waterproof M12 Wiring Harness (2m)\n1x Buku Panduan & Kartu Garansi Official");
-    setInTheBoxTextEn("1x SynchroTech Hardware Module\n1x Waterproof M12 Wiring Harness (2m)\n1x User Manual & Official Warranty Card");
+    setImage(DEFAULT_PRODUCT_IMAGE);
+    setSubtitle('');
+    setSubtitleEn('');
+    setDescription('');
+    setDescriptionEn('');
+    setLongDescription('');
+    setLongDescriptionEn('');
+    setKeySpecsText('');
+    setKeySpecsTextEn('');
+    setInTheBoxText('');
+    setInTheBoxTextEn('');
     setErrorMsg('');
     setViewMode('form');
   };
@@ -146,8 +173,7 @@ export default function AdminProductsPage() {
     setBadge(prod.badge || 'Paling Populer');
     setBadgeEn(prod.badgeEn || 'Most Popular');
     setBadgeType(prod.badgeType || 'purple');
-    setImage(prod.image || '/products/joulemeter.png');
-    setMockupType(prod.mockupType || 'joulemeter');
+    setImage(prod.image || DEFAULT_PRODUCT_IMAGE);
     setSubtitle(prod.subtitle || '');
     setSubtitleEn(prod.subtitleEn || '');
     setDescription(prod.description || '');
@@ -187,6 +213,16 @@ export default function AdminProductsPage() {
     setViewMode('form');
   };
 
+  // Best-effort cleanup — never blocks the caller if storage deletion fails.
+  const deleteBlobImage = async (url: string) => {
+    if (!url.includes('.blob.vercel-storage.com/')) return;
+    try {
+      await fetch(`/api/admin/products/upload?url=${encodeURIComponent(url)}`, { method: 'DELETE' });
+    } catch (err) {
+      console.error('Failed to delete old image from storage:', err);
+    }
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -195,8 +231,10 @@ export default function AdminProductsPage() {
     setErrorMsg('');
 
     try {
+      const compressedFile = await compressImage(file);
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', compressedFile);
 
       const res = await fetch('/api/admin/products/upload', {
         method: 'POST',
@@ -205,7 +243,9 @@ export default function AdminProductsPage() {
 
       const data = await res.json();
       if (data.success && data.imageUrl) {
+        const previousImage = image;
         setImage(data.imageUrl);
+        if (previousImage !== DEFAULT_PRODUCT_IMAGE) deleteBlobImage(previousImage);
       } else {
         setErrorMsg(data.error || 'Gagal mengunggah gambar');
       }
@@ -215,6 +255,12 @@ export default function AdminProductsPage() {
     } finally {
       setUploadingImage(false);
     }
+  };
+
+  const handleDeleteImage = () => {
+    if (image !== DEFAULT_PRODUCT_IMAGE) deleteBlobImage(image);
+    setImage(DEFAULT_PRODUCT_IMAGE);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -240,7 +286,6 @@ export default function AdminProductsPage() {
       badgeEn,
       badgeType,
       image,
-      mockupType,
       subtitle,
       subtitleEn,
       description,
@@ -356,7 +401,7 @@ export default function AdminProductsPage() {
                     <td>
                       <div className="w-12 h-12 rounded-lg bg-surface border border-foreground/10 overflow-hidden flex items-center justify-center">
                         <img 
-                          src={prod.image} 
+                          src={resolveImageSrc(prod.image)}
                           alt={prod.name} 
                           className="w-full h-full object-cover" 
                         />
@@ -501,7 +546,7 @@ export default function AdminProductsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left 7 Columns: Core Input Fields */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
                   <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Nama Produk *</label>
                   <input 
@@ -526,7 +571,7 @@ export default function AdminProductsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
                   <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Kategori Hardware *</label>
                   <input 
@@ -553,7 +598,7 @@ export default function AdminProductsPage() {
               </div>
 
               {/* Stock Status & Badges */}
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-group space-y-2">
                   <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Status Stok (ID)</label>
                   <input 
@@ -575,7 +620,7 @@ export default function AdminProductsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="form-group space-y-2">
                   <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Badge Text (ID)</label>
                   <input 
@@ -609,19 +654,6 @@ export default function AdminProductsPage() {
                   </select>
                 </div>
               </div>
-
-              <div className="form-group space-y-2">
-                <label className="text-xs font-mono font-bold text-muted-foreground uppercase block">Tipe Simulasi Dashboard Mockup</label>
-                <select 
-                  value={mockupType}
-                  onChange={(e) => setMockupType(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-sm focus:border-purple-electric"
-                >
-                  <option value="joulemeter">Joulemeter Power Sim (24-bit Current/Voltage)</option>
-                  <option value="nexus">Nexus 4G LTE Sim (Global Cellular + GNSS)</option>
-                  <option value="display">Cockpit Display Sim (Race Lap Timer)</option>
-                </select>
-              </div>
             </div>
 
             {/* Right 5 Columns: Upload Gambar & Live Card Preview */}
@@ -634,17 +666,17 @@ export default function AdminProductsPage() {
                 </label>
 
                 <div className="w-full h-52 rounded-2xl bg-surface border border-foreground/10 overflow-hidden flex items-center justify-center relative group">
-                  <img src={image} alt="Preview" className="w-full h-full object-cover" />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[11px] font-mono text-muted-foreground">URL Gambar Publik:</label>
-                  <input 
-                    type="text" 
-                    value={image} 
-                    onChange={(e) => setImage(e.target.value)} 
-                    className="w-full px-4 py-2.5 rounded-xl bg-surface border border-foreground/10 text-foreground text-xs font-mono"
-                  />
+                  <img src={resolveImageSrc(image)} alt="Preview" className="w-full h-full object-cover" />
+                  {image !== DEFAULT_PRODUCT_IMAGE && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteImage}
+                      title="Hapus Gambar"
+                      className="absolute top-3 right-3 p-2 rounded-lg bg-black/70 text-red-400 opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </div>
 
                 <input 
@@ -703,7 +735,7 @@ export default function AdminProductsPage() {
         {/* TAB 2: Konten Deskripsi (ID & EN) */}
         {activeTab === 'content' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="form-group space-y-2">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase flex items-center space-x-2">
                   <Globe size={14} />
@@ -733,7 +765,7 @@ export default function AdminProductsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="form-group space-y-2">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase">
                   Deskripsi Singkat Katalog (ID)
@@ -761,7 +793,7 @@ export default function AdminProductsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="form-group space-y-2">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase">
                   Deskripsi Detail Panjang (ID)
@@ -794,7 +826,7 @@ export default function AdminProductsPage() {
         {/* TAB 3: Fitur & Kelengkapan Box */}
         {activeTab === 'specs' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="form-group space-y-2">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase">
                   Fitur Utama Checklist (ID) — 1 Poin per Baris
@@ -822,7 +854,7 @@ export default function AdminProductsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="form-group space-y-2">
                 <label className="text-xs font-mono font-bold text-purple-electric uppercase">
                   Kelengkapan Paket / In The Box (ID) — 1 Item per Baris
