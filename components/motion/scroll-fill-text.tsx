@@ -13,7 +13,7 @@ interface ScrollFillWordsProps {
 // Paints each word purple as the page scrolls, left-to-right, one word per
 // scroll step — unfilled text stays the same color as the background.
 // Fill only ratchets forward: scrolling back up never un-fills a word.
-export function ScrollFillWords({ words, stepPx = 200, className = '' }: ScrollFillWordsProps) {
+export function ScrollFillWords({ words, stepPx = 80, className = '' }: ScrollFillWordsProps) {
   const isMobile = useIsMobile();
   const { scrollY } = useScroll();
   const maxScrollY = useMotionValue(0);

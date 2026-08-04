@@ -17,6 +17,9 @@ export function CTA({ lang }: CTAProps) {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <MotionReveal>
           <div className="relative border border-purple-electric/30 p-10 md:p-16 text-center overflow-hidden">
+            {/* Background image */}
+            <div className="absolute inset-0 bg-cover bg-center bg-no-repeat cta-bg" />
+            <div className="absolute inset-0 bg-background/75" />
             <div className="relative z-10 max-w-3xl mx-auto">
               <span className="font-mono text-xs text-orange-motorsport font-bold tracking-widest uppercase mb-4 block">
                 {lang === 'id' ? 'SIAP MENGOPTIMALKAN BALAPAN ANDA?' : 'READY TO DOMINATE THE TRACK?'}

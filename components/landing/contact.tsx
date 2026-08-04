@@ -53,42 +53,44 @@ export function Contact({ lang }: ContactProps) {
         </MotionReveal>
 
         {/* Contact Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Info Card */}
-          <div className="lg:col-span-5">
-            <MotionReveal delay={0.1}>
-              <div className="bg-foreground/2 border border-foreground/10 p-8 space-y-6">
-                <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-                  {t('detailTitle', lang)}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                  {t('detailDesc', lang)}
-                </p>
+          <div className="lg:col-span-5 h-full">
+            <MotionReveal delay={0.1} className="h-full">
+              <div className="bg-foreground/2 border border-foreground/10 p-8 lg:p-10 h-full flex flex-col">
+                <div>
+                  <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3">
+                    {t('detailTitle', lang)}
+                  </h3>
+                  <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-4">
+                    {t('detailDesc', lang)}
+                  </p>
+                </div>
 
-                <div className="space-y-4 pt-2">
+                <div className="flex-1 flex flex-col justify-between pt-6 space-y-6 lg:space-y-0">
                   <div className="flex items-start space-x-4">
-                    <div className="p-2.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-0.5">
-                      <MapPin size={20} />
+                    <div className="p-3.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-1">
+                      <MapPin size={22} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-mono font-bold text-muted-foreground uppercase">{t('addressLabel', lang)}</h4>
-                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                      <h4 className="text-xs sm:text-sm font-mono font-bold text-muted-foreground uppercase tracking-wider">{t('addressLabel', lang)}</h4>
+                      <p className="text-sm sm:text-base text-muted-foreground mt-1 leading-relaxed">
                         Jl. St., Karanggeringging, Sumpiuh, Kec. Sumpiuh, Kabupaten Banyumas, Jawa Tengah 53195, Indonesia
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="p-2.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-0.5">
-                      <Phone size={20} />
+                    <div className="p-3.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-1">
+                      <Phone size={22} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-mono font-bold text-muted-foreground uppercase">{t('whatsappLabel', lang)}</h4>
+                      <h4 className="text-xs sm:text-sm font-mono font-bold text-muted-foreground uppercase tracking-wider">{t('whatsappLabel', lang)}</h4>
                       <a
                         href="https://wa.me/628132595764"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-muted-foreground hover:text-purple-electric transition-colors mt-1 block font-mono"
+                        className="text-sm sm:text-base text-muted-foreground hover:text-purple-electric transition-colors mt-1 block font-mono font-medium"
                       >
                         +62 813-2595-764
                       </a>
@@ -96,14 +98,14 @@ export function Contact({ lang }: ContactProps) {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="p-2.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-0.5">
-                      <Mail size={20} />
+                    <div className="p-3.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-1">
+                      <Mail size={22} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-mono font-bold text-muted-foreground uppercase">{t('emailLabel', lang)}</h4>
+                      <h4 className="text-xs sm:text-sm font-mono font-bold text-muted-foreground uppercase tracking-wider">{t('emailLabel', lang)}</h4>
                       <a
                         href="mailto:synchrotechrace@gmail.com"
-                        className="text-xs text-muted-foreground hover:text-purple-electric transition-colors mt-1 block font-mono"
+                        className="text-sm sm:text-base text-muted-foreground hover:text-purple-electric transition-colors mt-1 block font-mono font-medium"
                       >
                         synchrotechrace@gmail.com
                       </a>
@@ -111,12 +113,12 @@ export function Contact({ lang }: ContactProps) {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="p-2.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-0.5">
-                      <Activity size={20} />
+                    <div className="p-3.5 bg-purple-electric/10 text-purple-electric flex-shrink-0 mt-1">
+                      <Activity size={22} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-mono font-bold text-muted-foreground uppercase">{t('businessCategory', lang)}</h4>
-                      <p className="text-xs text-muted-foreground mt-1">{t('businessDesc', lang)}</p>
+                      <h4 className="text-xs sm:text-sm font-mono font-bold text-muted-foreground uppercase tracking-wider">{t('businessCategory', lang)}</h4>
+                      <p className="text-sm sm:text-base text-muted-foreground mt-1 leading-relaxed">{t('businessDesc', lang)}</p>
                     </div>
                   </div>
                 </div>
@@ -125,14 +127,14 @@ export function Contact({ lang }: ContactProps) {
           </div>
 
           {/* Form Card */}
-          <div className="lg:col-span-7">
-            <MotionReveal delay={0.2}>
-              <div className="bg-foreground/2 border border-foreground/10 p-8">
+          <div className="lg:col-span-7 h-full">
+            <MotionReveal delay={0.2} className="h-full">
+              <div className="bg-foreground/2 border border-foreground/10 p-8 h-full flex flex-col">
                 <h3 className="font-display text-2xl font-bold text-foreground mb-6">
                   {t('formTitle', lang)}
                 </h3>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col">
                   <div>
                     <label htmlFor="name" className="block text-xs font-mono font-semibold text-muted-foreground uppercase mb-2">
                       {t('fullName', lang)}
@@ -165,7 +167,7 @@ export function Contact({ lang }: ContactProps) {
                     />
                   </div>
 
-                  <div>
+                  <div className="flex-1 flex flex-col">
                     <label htmlFor="message" className="block text-xs font-mono font-semibold text-muted-foreground uppercase mb-2">
                       {t('messageLabel', lang)}
                     </label>
@@ -177,11 +179,11 @@ export function Contact({ lang }: ContactProps) {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       disabled={submitting}
-                      className="resize-none"
+                      className="resize-none flex-1"
                     />
                   </div>
 
-                  <Button type="submit" variant="primary" className="w-full justify-center" disabled={submitting}>
+                  <Button type="submit" variant="primary" className="w-full justify-center mt-auto" disabled={submitting}>
                     {submitting ? (
                       <>
                         <RefreshCw className="animate-spin w-4 h-4" />

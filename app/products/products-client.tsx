@@ -89,7 +89,11 @@ export default function ProductsPageClient() {
 
       <main className="flex-1">
         {/* Page Hero Banner */}
-        <section className="relative py-20 bg-background border-b border-foreground/5 telemetry-grid-bg overflow-hidden">
+        <section className="relative py-20 border-b border-foreground/5 overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat products-bg" />
+          {/* Overlay for readability + grid */}
+          <div className="absolute inset-0 bg-background/70 telemetry-grid-bg" />
           <div className="max-w-7xl mx-auto px-4 md:px-8 text-center relative z-10">
             {/* Breadcrumb */}
             <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground mb-6 font-mono">

@@ -20,6 +20,8 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
+import { PageTracker } from '@/components/analytics/page-tracker';
+
 export const metadata: Metadata = {
   title: 'SynchroTech Race — Precision Motorsport Telemetry',
   description: 'Advanced telemetry systems for racers who demand data-driven performance. Real-time streaming, 25Hz GNSS, 24-bit ADC, and 4G LTE integration.',
@@ -49,8 +51,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logogram.png" />
       </head>
       <body className="antialiased bg-background text-foreground font-sans selection:bg-purple-electric selection:text-white">
+        <PageTracker />
         {children}
       </body>
     </html>
   );
 }
+

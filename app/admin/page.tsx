@@ -11,6 +11,7 @@ import {
   ArrowRight,
   WifiOff
 } from 'lucide-react';
+import { AdminAnalyticsChart } from '../../components/admin/analytics-chart';
 
 export const dynamic = 'force-dynamic';
 
@@ -98,6 +99,9 @@ export default async function AdminDashboardPage() {
           );
         })}
       </div>
+
+      {/* Traffic & Telemetry Visits Analytics Chart */}
+      <AdminAnalyticsChart />
 
       {/* Main Grid split */}
       <div className="dash-main-split">

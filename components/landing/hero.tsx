@@ -15,7 +15,11 @@ interface HeroProps {
 
 export function Hero({ lang, onExploreClick, onDemoClick }: HeroProps) {
   return (
-    <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden py-20 md:py-28 telemetry-grid-bg">
+    <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden py-12 md:py-16">
+      {/* Background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat hero-bg" />
+      {/* Dark overlay for readability + grid */}
+      <div className="absolute inset-0 bg-background/70 telemetry-grid-bg" />
       <div className="max-w-7xl mx-auto px-4 md:px-8 w-full z-10">
         <div className="max-w-4xl">
           {/* Top Tagline Badge */}
@@ -30,7 +34,7 @@ export function Hero({ lang, onExploreClick, onDemoClick }: HeroProps) {
 
           {/* Main Headline */}
           <MotionReveal delay={0.2}>
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold text-foreground tracking-tighter uppercase leading-[0.95] mb-6">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-foreground tracking-tighter uppercase leading-[0.95] mb-6">
               {lang === 'en' ? (
                 <>
                   Precision <br />

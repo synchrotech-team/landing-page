@@ -89,6 +89,38 @@ body {
   background-size: 48px 48px;
 }
 
+/* Hero background – dark (default) uses night, light uses day */
+.hero-bg {
+  background-image: url('/assets/hero-bg-night.png');
+}
+.light .hero-bg {
+  background-image: url('/assets/hero-bg.png');
+}
+
+/* Download page background – dark uses night, light uses day */
+.download-bg {
+  background-image: url('/assets/download-bg-night.png');
+}
+.light .download-bg {
+  background-image: url('/assets/download-bg.png');
+}
+
+/* CTA background – dark uses night cockpit, light uses day cockpit */
+.cta-bg {
+  background-image: url('/assets/cta-bg-night.png');
+}
+.light .cta-bg {
+  background-image: url('/assets/cta-bg.png');
+}
+
+/* Products catalog background – dark uses night engineering, light uses day engineering studio */
+.products-bg {
+  background-image: url('/assets/products-bg-night.png');
+}
+.light .products-bg {
+  background-image: url('/assets/products-bg.png');
+}
+
 /* Digital Display Mockup inside Hardware Card */
 .display-mockup {
   background: #000000;

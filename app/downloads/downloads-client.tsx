@@ -78,8 +78,12 @@ export default function DownloadsPageClient() {
         />
 
         {/* Page Hero */}
-        <section className="pt-16 pb-12 border-b border-foreground/5 relative">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 text-center space-y-6">
+        <section className="pt-16 pb-12 border-b border-foreground/5 relative overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat download-bg" />
+          {/* Overlay for readability + grid */}
+          <div className="absolute inset-0 bg-background/70 telemetry-grid-bg" />
+          <div className="max-w-7xl mx-auto px-4 md:px-8 text-center space-y-6 relative z-10">
             <div className="inline-flex items-center space-x-2 px-4 py-1.5 bg-purple-electric/10 border border-purple-electric/30">
               <Zap size={14} className="text-purple-electric" />
               <span className="font-mono text-xs font-bold uppercase tracking-widest text-purple-electric">
