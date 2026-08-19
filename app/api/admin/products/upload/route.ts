@@ -24,29 +24,30 @@ export async function POST(req: NextRequest) {
     const safeBaseName = path.basename(originalName, extension).toLowerCase().replace(/[^a-z0-9]/g, '-');
     const fileName = `${safeBaseName}-${Date.now()}${extension}`;
 
-    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-
     // Option 1: Use Vercel Blob Cloud Storage (public — served straight off Vercel's
-    // CDN edge, no server-side proxy needed for delivery)
-    if (blobToken) {
-      try {
-        const blob = await put(`products/${fileName}`, file, {
-          access: 'public',
-          token: blobToken,
-        });
+    // CDN edge, no server-side proxy needed for delivery). Credentials are resolved
+    // by the SDK: OIDC (VERCEL_OIDC_TOKEN + BLOB_STORE_ID) on Vercel, or
+    // BLOB_READ_WRITE_TOKEN if one is set.
+    try {
+      const blob = await put(`products/${fileName}`, file, { access: 'public' });
 
-        return NextResponse.json({
-          success: true,
-          imageUrl: blob.url,
-          fileName,
-          storage: 'vercel-blob',
-        });
-      } catch (blobErr) {
-        console.warn('Vercel Blob image upload warning, falling back to local storage:', blobErr);
+      return NextResponse.json({
+        success: true,
+        imageUrl: blob.url,
+        fileName,
+        storage: 'vercel-blob',
+      });
+    } catch (blobErr) {
+      // On Vercel the filesystem is ephemeral, so the local fallback below would
+      // report success and then lose the file. Fail loudly instead.
+      if (process.env.VERCEL) {
+        console.error('Vercel Blob image upload failed:', blobErr);
+        return NextResponse.json({ error: (blobErr as Error).message }, { status: 500 });
       }
+      console.warn('Vercel Blob image upload warning, falling back to local storage:', blobErr);
     }
 
-    // Option 2: Fallback to Local Disk Storage (public/products/)
+    // Option 2: Fallback to Local Disk Storage (public/products/) — local dev only
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -78,11 +79,10 @@ export async function DELETE(req: NextRequest) {
     }
 
     const url = req.nextUrl.searchParams.get('url');
-    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
 
     // Only ever delete actual Vercel Blob objects — never touch static/local seed assets.
-    if (url && blobToken && url.includes('.blob.vercel-storage.com/')) {
-      await del(url, { token: blobToken });
+    if (url && url.includes('.blob.vercel-storage.com/')) {
+      await del(url);
     }
 
     return NextResponse.json({ success: true });

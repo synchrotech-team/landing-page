@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { upload } from '@vercel/blob/client';
+import { uploadPresigned } from '@vercel/blob/client';
 import {
   Download, 
   Upload, 
@@ -98,7 +98,7 @@ export default function AdminSoftwarePage() {
       // Uploads straight from the browser to Vercel Blob — the file never
       // passes through our server, so there's no body-size limit to hit.
       const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
-      const blob = await upload(`software/${Date.now()}/${safeName}`, file, {
+      const blob = await uploadPresigned(`software/${Date.now()}/${safeName}`, file, {
         access: 'public',
         handleUploadUrl: '/api/admin/software/upload',
         multipart: true,
