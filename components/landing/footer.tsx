@@ -104,7 +104,7 @@ export function Footer({ lang, onToggleLang, onTriggerComingSoon }: FooterProps)
               </a>
 
               <a
-                href="https://www.tiktok.com/@synchrotech5?_r=1&_t=ZS-97aTFNxtGYq"
+                href="https://www.tiktok.com/@synchrotech.idn?_r=1&_t=ZS-991DYSyMyIs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2.5 rounded-xl bg-foreground/5 hover:bg-purple-electric text-foreground transition-colors"
