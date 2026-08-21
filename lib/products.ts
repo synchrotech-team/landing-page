@@ -33,13 +33,36 @@ export interface Product extends ProductLocalizedData {
 }
 
 export function getLocalizedProduct(product: Product, lang: 'id' | 'en'): ProductLocalizedData & Product {
+  const fallback = PRODUCTS_DATA[product.slug];
+
+  const baseFeatures = (product.features && product.features.length > 0) ? product.features : (fallback?.features || []);
+  const baseSpecs = (product.specifications && product.specifications.length > 0) ? product.specifications : (fallback?.specifications || []);
+  const baseInTheBox = (product.inTheBox && product.inTheBox.length > 0) ? product.inTheBox : (fallback?.inTheBox || []);
+  const baseKeySpecs = (product.keySpecs && product.keySpecs.length > 0) ? product.keySpecs : (fallback?.keySpecs || []);
+
   if (lang === 'en' && product.en) {
+    const enFeatures = (product.en.features && product.en.features.length > 0) ? product.en.features : (fallback?.en?.features || baseFeatures);
+    const enSpecs = (product.en.specifications && product.en.specifications.length > 0) ? product.en.specifications : (fallback?.en?.specifications || baseSpecs);
+    const enInTheBox = (product.en.inTheBox && product.en.inTheBox.length > 0) ? product.en.inTheBox : (fallback?.en?.inTheBox || baseInTheBox);
+    const enKeySpecs = (product.en.keySpecs && product.en.keySpecs.length > 0) ? product.en.keySpecs : (fallback?.en?.keySpecs || baseKeySpecs);
+
     return {
       ...product,
       ...product.en,
+      features: enFeatures,
+      specifications: enSpecs,
+      inTheBox: enInTheBox,
+      keySpecs: enKeySpecs,
     };
   }
-  return product;
+
+  return {
+    ...product,
+    features: baseFeatures,
+    specifications: baseSpecs,
+    inTheBox: baseInTheBox,
+    keySpecs: baseKeySpecs,
+  };
 }
 
 export const PRODUCTS_DATA: Record<string, Product> = {

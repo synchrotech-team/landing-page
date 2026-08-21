@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   try {
     // 1. Check in-memory RAM cache first
     const cachedData = Cache.get<any[]>(CACHE_KEY);
-    if (cachedData) {
+    if (cachedData && cachedData.length > 0 && cachedData.every(p => Array.isArray(p.features) && p.features.length > 0)) {
       return NextResponse.json(
         { success: true, products: cachedData, cached: true },
         {
@@ -31,6 +31,8 @@ export async function GET(req: NextRequest) {
 
     if (dbProducts.length > 0) {
       formatted = dbProducts.map(p => {
+        const fallback = PRODUCTS_DATA[p.slug];
+
         let keySpecs: string[] = [];
         let keySpecsEn: string[] = [];
         let specs: any[] = [];
@@ -47,34 +49,46 @@ export async function GET(req: NextRequest) {
         try { inTheBox = p.inTheBoxJson ? JSON.parse(p.inTheBoxJson) : []; } catch (e) {}
         try { inTheBoxEn = p.inTheBoxJsonEn ? JSON.parse(p.inTheBoxJsonEn) : inTheBox; } catch (e) {}
 
+        const finalKeySpecs = keySpecs.length > 0 ? keySpecs : (fallback?.keySpecs || [p.subtitle || p.name]);
+        const finalKeySpecsEn = keySpecsEn.length > 0 ? keySpecsEn : (fallback?.en?.keySpecs || finalKeySpecs);
+
+        const finalFeatures = features.length > 0 ? features : (fallback?.features || []);
+        const finalFeaturesEn = featuresEn.length > 0 ? featuresEn : (fallback?.en?.features || finalFeatures);
+
+        const finalSpecs = specs.length > 0 ? specs : (fallback?.specifications || []);
+        const finalSpecsEn = fallback?.en?.specifications || finalSpecs;
+
+        const finalInTheBox = inTheBox.length > 0 ? inTheBox : (fallback?.inTheBox || []);
+        const finalInTheBoxEn = inTheBoxEn.length > 0 ? inTheBoxEn : (fallback?.en?.inTheBox || finalInTheBox);
+
         return {
           id: p.id,
           slug: p.slug,
           name: p.name,
-          subtitle: p.subtitle || '',
-          badge: p.badge || '',
-          badgeType: p.badgeType as any || 'purple',
-          category: p.category,
-          price: p.price,
-          stockStatus: p.stockStatus || 'Ready Stock',
-          description: p.description || '',
-          longDescription: p.longDescription || '',
-          keySpecs: keySpecs.length > 0 ? keySpecs : [p.subtitle || p.name],
-          features: features.length > 0 ? features : [],
-          specifications: specs.length > 0 ? specs : [],
-          inTheBox: inTheBox.length > 0 ? inTheBox : [],
-          mockupType: p.mockupType as any || 'joulemeter',
-          image: p.image,
+          subtitle: p.subtitle || fallback?.subtitle || '',
+          badge: p.badge || fallback?.badge || '',
+          badgeType: p.badgeType as any || fallback?.badgeType || 'purple',
+          category: p.category || fallback?.category || '',
+          price: p.price || fallback?.price || '',
+          stockStatus: p.stockStatus || fallback?.stockStatus || 'Ready Stock',
+          description: p.description || fallback?.description || '',
+          longDescription: p.longDescription || fallback?.longDescription || '',
+          keySpecs: finalKeySpecs,
+          features: finalFeatures,
+          specifications: finalSpecs,
+          inTheBox: finalInTheBox,
+          mockupType: p.mockupType as any || fallback?.mockupType || 'joulemeter',
+          image: p.image || fallback?.image || '',
           en: {
-            subtitle: p.subtitleEn || p.subtitle || '',
-            badge: p.badgeEn || p.badge || '',
-            stockStatus: p.stockStatusEn || p.stockStatus || 'In Stock',
-            description: p.descriptionEn || p.description || '',
-            longDescription: p.longDescriptionEn || p.longDescription || '',
-            keySpecs: keySpecsEn.length > 0 ? keySpecsEn : keySpecs,
-            features: featuresEn.length > 0 ? featuresEn : features,
-            specifications: specs,
-            inTheBox: inTheBoxEn.length > 0 ? inTheBoxEn : inTheBox,
+            subtitle: p.subtitleEn || p.subtitle || fallback?.en?.subtitle || '',
+            badge: p.badgeEn || p.badge || fallback?.en?.badge || '',
+            stockStatus: p.stockStatusEn || p.stockStatus || fallback?.en?.stockStatus || 'In Stock',
+            description: p.descriptionEn || p.description || fallback?.en?.description || '',
+            longDescription: p.longDescriptionEn || p.longDescription || fallback?.en?.longDescription || '',
+            keySpecs: finalKeySpecsEn,
+            features: finalFeaturesEn,
+            specifications: finalSpecsEn,
+            inTheBox: finalInTheBoxEn,
           }
         };
       });

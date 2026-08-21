@@ -114,11 +114,11 @@ export default function DownloadsPageClient() {
               </div>
               <div className="flex items-center space-x-2 bg-foreground/5 border border-foreground/10 px-4 py-2 rounded-xl">
                 <ShieldCheck size={16} className="text-emerald-400" />
-                <span>Terverifikasi Bebas Virus / Malware</span>
+                <span>{lang === 'en' ? 'Verified Virus / Malware Free' : 'Terverifikasi Bebas Virus / Malware'}</span>
               </div>
               <div className="flex items-center space-x-2 bg-foreground/5 border border-foreground/10 px-4 py-2 rounded-xl">
                 <Cpu size={16} className="text-sky-400" />
-                <span>Lisensi Klien Otomatis</span>
+                <span>{lang === 'en' ? 'Automatic Client License' : 'Lisensi Klien Otomatis'}</span>
               </div>
             </div>
           </div>
@@ -129,7 +129,9 @@ export default function DownloadsPageClient() {
           {loading ? (
             <div className="text-center py-16 space-y-4">
               <div className="w-10 h-10 border-4 border-purple-electric border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="font-mono text-xs text-muted-foreground">Memuat rilis software terbaru...</p>
+              <p className="font-mono text-xs text-muted-foreground">
+                {lang === 'en' ? 'Loading latest software releases...' : 'Memuat rilis software terbaru...'}
+              </p>
             </div>
           ) : activeRelease ? (
             <div className="bg-surface border border-purple-electric/40 p-8 md:p-12 relative overflow-hidden space-y-8">
@@ -138,7 +140,7 @@ export default function DownloadsPageClient() {
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
-                      ● LATEST STABLE BUILD
+                      {lang === 'en' ? '● LATEST STABLE BUILD' : '● RILIS STABIL TERBARU'}
                     </span>
                     <span className="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-purple-electric/20 text-purple-electric border border-purple-electric/30 uppercase">
                       {activeRelease.version}
@@ -149,7 +151,7 @@ export default function DownloadsPageClient() {
                     {lang === 'en' && activeRelease.titleEn ? activeRelease.titleEn : activeRelease.title}
                   </h2>
                   <p className="font-mono text-sm text-purple-electric">
-                    Nama File: <span className="text-foreground font-bold">{activeRelease.fileName}</span>
+                    {lang === 'en' ? 'File Name:' : 'Nama File:'} <span className="text-foreground font-bold">{activeRelease.fileName}</span>
                   </p>
                 </div>
 
@@ -160,10 +162,10 @@ export default function DownloadsPageClient() {
                     className="inline-flex items-center space-x-3 px-8 py-5 bg-purple-electric text-white font-display text-sm font-bold uppercase tracking-wider hover:brightness-90 transition-all"
                   >
                     <Download size={20} />
-                    <span>UNDUH INSTALLER (.EXE)</span>
+                    <span>{lang === 'en' ? 'DOWNLOAD INSTALLER (.EXE)' : 'UNDUH INSTALLER (.EXE)'}</span>
                   </a>
                   <p className="text-[11px] font-mono text-muted-foreground text-center md:text-right">
-                    Ukuran: <span className="text-foreground font-bold">{activeRelease.fileSize || '45 MB'}</span> • Total Unduhan: <span className="text-emerald-400 font-bold">{activeRelease.downloadCount}x</span>
+                    {lang === 'en' ? 'Size:' : 'Ukuran:'} <span className="text-foreground font-bold">{activeRelease.fileSize || '45 MB'}</span> • {lang === 'en' ? 'Total Downloads:' : 'Total Unduhan:'} <span className="text-emerald-400 font-bold">{activeRelease.downloadCount}x</span>
                   </p>
                 </div>
               </div>
@@ -171,12 +173,16 @@ export default function DownloadsPageClient() {
               {/* Release Details Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-foreground/10">
                 <div className="p-5 rounded-2xl bg-surface border border-foreground/10 space-y-1">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase">Sistem Operasi Minimal:</span>
+                  <span className="text-[11px] font-mono text-muted-foreground uppercase">
+                    {lang === 'en' ? 'Minimum OS:' : 'Sistem Operasi Minimal:'}
+                  </span>
                   <div className="font-bold text-foreground text-sm">{activeRelease.osRequirements || 'Windows 10 / 11 (64-bit)'}</div>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-surface border border-foreground/10 space-y-1">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase">Pengiriman Cloud:</span>
+                  <span className="text-[11px] font-mono text-muted-foreground uppercase">
+                    {lang === 'en' ? 'Cloud Delivery:' : 'Pengiriman Cloud:'}
+                  </span>
                   <div className="font-bold text-emerald-400 text-sm flex items-center space-x-1.5">
                     <CheckCircle2 size={16} />
                     <span>Vercel Blob Storage CDN</span>
@@ -184,7 +190,9 @@ export default function DownloadsPageClient() {
                 </div>
 
                 <div className="p-5 rounded-2xl bg-surface border border-foreground/10 space-y-1">
-                  <span className="text-[11px] font-mono text-muted-foreground uppercase">Verifikasi Lisensi:</span>
+                  <span className="text-[11px] font-mono text-muted-foreground uppercase">
+                    {lang === 'en' ? 'License Verification:' : 'Verifikasi Lisensi:'}
+                  </span>
                   <div className="font-bold text-sky-400 text-sm">Online Hardware ID Locking</div>
                 </div>
               </div>
@@ -193,13 +201,17 @@ export default function DownloadsPageClient() {
               <div className="p-6 rounded-2xl bg-surface border border-foreground/10 space-y-4">
                 <h3 className="font-mono text-xs font-bold text-purple-electric uppercase tracking-wider flex items-center space-x-2">
                   <FileText size={16} />
-                  <span>Catatan Rilis Build & Fitur Baru ({activeRelease.version})</span>
+                  <span>
+                    {lang === 'en' 
+                      ? `Build Release Notes & New Features (${activeRelease.version})` 
+                      : `Catatan Rilis Build & Fitur Baru (${activeRelease.version})`}
+                  </span>
                 </h3>
 
                 <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                   {lang === 'en' && activeRelease.releaseNotesEn 
                     ? activeRelease.releaseNotesEn 
-                    : activeRelease.releaseNotes || 'Versi rilis resmi SynchroTech Race Telemetry Suite.'
+                    : activeRelease.releaseNotes || (lang === 'en' ? 'Official release version of SynchroTech Race Telemetry Suite.' : 'Versi rilis resmi SynchroTech Race Telemetry Suite.')
                   }
                 </p>
               </div>
@@ -231,7 +243,9 @@ export default function DownloadsPageClient() {
                   {lang === 'en' ? 'Version Release History' : 'Riwayat Versi Installer Software'}
                 </h3>
                 <p className="text-xs font-mono text-muted-foreground">
-                  Arsip versi build software sebelumnya yang dapat diunduh ulang
+                  {lang === 'en' 
+                    ? 'Archive of previous software build versions available for re-download' 
+                    : 'Arsip versi build software sebelumnya yang dapat diunduh ulang'}
                 </p>
               </div>
 
@@ -256,7 +270,7 @@ export default function DownloadsPageClient() {
 
                     <div className="pt-3 border-t border-foreground/10 flex items-center justify-between">
                       <span className="text-[11px] font-mono text-muted-foreground">
-                        Unduhan: <span className="text-foreground font-bold">{rel.downloadCount}x</span>
+                        {lang === 'en' ? 'Downloads:' : 'Unduhan:'} <span className="text-foreground font-bold">{rel.downloadCount}x</span>
                       </span>
 
                       <a
@@ -264,7 +278,7 @@ export default function DownloadsPageClient() {
                         className="px-4 py-2 rounded-xl bg-foreground/5 hover:bg-purple-electric text-purple-electric hover:text-white text-xs font-mono font-bold uppercase transition-all flex items-center space-x-1.5"
                       >
                         <Download size={14} />
-                        <span>Unduh Versi Ini</span>
+                        <span>{lang === 'en' ? 'Download This Version' : 'Unduh Versi Ini'}</span>
                       </a>
                     </div>
                   </div>
